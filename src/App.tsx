@@ -12,6 +12,7 @@ import type { Character } from './types/character';
 import type { WorkspaceView } from './types/workspace';
 import { workspacePath } from './utils/workspacePath';
 import PageTitle from './components/layout/PageTitle';
+import TimelineStatus from './components/layout/TimelineStatus';
 
 export default function App({
 	activeView
@@ -178,7 +179,12 @@ export default function App({
 						<h1 ref={headingRef} tabIndex={-1}>
 							{title}
 						</h1>
+
 						<p>{description}</p>
+
+						{isTimeline && selectedUniverse && (
+							<TimelineStatus status={selectedUniverse.content_status} />
+						)}
 					</div>
 
 					{isTimeline && (

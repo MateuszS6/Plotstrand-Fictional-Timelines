@@ -6,6 +6,7 @@ import type { Franchise } from "../types/franchise";
 import type { Universe } from "../types/universe";
 import { Link } from "react-router";
 import { workspacePath } from "../utils/workspacePath";
+import TimelineStatus from "../components/layout/TimelineStatus";
 
 type Editor =
 	| { kind: "franchise"; record: Franchise | null; }
@@ -178,6 +179,10 @@ export default function WorkspacesPage({
 						? universe.code || "Timeline"
 						: "Explore timelines"}
 
+					{universe && (
+						<TimelineStatus status={universe.content_status} />
+					)}
+
 					{canEdit && universe && (
 						<span className="browse-visibility">
 							{!universe.is_published && (
@@ -282,6 +287,9 @@ export default function WorkspacesPage({
 						code: editor.kind === "universe"
 							? editor.record?.code ?? null
 							: null,
+						content_status: editor.kind === "universe"
+							? editor.record?.content_status ?? "in_progress"
+							: "in_progress",
 						is_published: editor.kind === "universe"
 							? editor.record?.is_published ?? false
 							: false

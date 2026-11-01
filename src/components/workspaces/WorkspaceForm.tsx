@@ -1,8 +1,10 @@
 import { useRef, useState, type SubmitEvent } from "react";
+import type { TimelineContentStatus } from "../../types/universe";
 
 export interface WorkspaceFormValues {
 	name: string;
 	code: string | null;
+	content_status: TimelineContentStatus;
 	is_published: boolean;
 }
 
@@ -25,6 +27,7 @@ export default function WorkspaceForm({
 }: WorkspaceFormProps) {
 	const [name, setName] = useState(initialValues.name);
 	const [code, setCode] = useState(initialValues.code ?? "");
+	const [contentStatus, setContentStatus] = useState(initialValues.content_status);
 	const [isPublished, setIsPublished] = useState(initialValues.is_published);
 	const [error, setError] = useState<string | null>(null);
 	const submittingRef = useRef(false);
@@ -52,7 +55,8 @@ export default function WorkspaceForm({
 				code: kind === "universe"
 					? code.trim() || null
 					: null,
-				is_published: kind === "universe" && isPublished
+				is_published: kind === "universe" && isPublished,
+				content_status: contentStatus
 			});
 		} catch (caughtError) {
 			console.error(caughtError);
@@ -113,6 +117,29 @@ export default function WorkspaceForm({
 									setCode(event.target.value)
 								}
 							/>
+						</label>
+					)}
+
+					{kind === "universe" && (
+						<label className="form-field">
+							<span>Timeline coverage</span>
+
+							<select
+								value={contentStatus}
+								onChange={(event) => setContentStatus(
+									event.target.value === "up_to_date"
+										? "up_to_date"
+										: "in_progress"
+								)}
+							>
+								<option value={"in_progress"}>In progress</option>
+								<option value={"up_to_date"}>Up to date</option>
+							</select>
+
+							<small>
+								Choose this manually. It describes timeline coverage,
+								not whether the universe still exists in the story.
+							</small>
 						</label>
 					)}
 				</div>

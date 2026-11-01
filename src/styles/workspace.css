@@ -171,6 +171,7 @@
 .browse-card-meta {
 	display: flex;
 	flex-wrap: wrap;
+	align-items: center;
 	gap: 8px 16px;
 	margin: auto 0 0;
 	padding: 0 20px 20px;
@@ -186,57 +187,6 @@
 .browse-card-actions {
 	padding: 12px 20px;
 	border-top: 1px solid var(--border-secondary);
-}
-
-@media (max-width: 700px) {
-	.workspace-bar {
-		padding: 8px 12px;
-		gap: 8px;
-	}
-
-	.workspace-breadcrumbs,
-	.workspace-switcher,
-	.workspace-nav {
-		flex-basis: 100%;
-	}
-
-	.workspace-switcher select {
-		flex: 1;
-		width: auto;
-		min-height: 40px;
-		font-size: 16px;
-	}
-
-	.browse-grid {
-		gap: 12px;
-	}
-}
-
-.page-heading h1[tabindex="-1"]:focus {
-	outline: none;
-}
-
-/* Navigation links retain the existing control styling. */
-
-.workspace-link,
-.workspace-tab,
-.browse-card-open,
-.utility-button {
-	text-decoration: none;
-}
-
-a:focus-visible {
-	outline: 2px solid var(--color-primary);
-	outline-offset: 3px;
-}
-
-a[aria-disabled="true"] {
-	opacity: 0.55;
-	cursor: default;
-}
-
-.browse-card-open[aria-disabled="true"]:hover {
-	background: transparent;
 }
 
 /* Featured franchise */
@@ -272,4 +222,82 @@ a[aria-disabled="true"] {
 
 .browse-card-featured .browse-card-meta {
 	padding: 0 24px 24px;
+}
+
+/* Timeline status */
+
+.timeline-status {
+	display: inline-flex;
+	align-items: center;
+	padding: 3px 8px;
+	border: 1px solid #63502e;
+	border-radius: 999px;
+	background: #292319;
+	color: #e6c58b;
+	font-size: 12px;
+	line-height: 1.4;
+	font-weight: 500;
+}
+
+.timeline-status[data-status="up_to_date"] {
+	border-color: #315b4c;
+	background: #182b24;
+	color: #a3d8bd;
+}
+
+.page-heading>.timeline-status {
+	margin-top: 6px;
+}
+
+/* Navigation links retain the existing control styling. */
+
+.workspace-link,
+.workspace-tab,
+.browse-card-open,
+.utility-button {
+	text-decoration: none;
+}
+
+a:focus-visible {
+	outline: 2px solid var(--color-primary);
+	outline-offset: 3px;
+}
+
+a[aria-disabled="true"] {
+	opacity: 0.55;
+	cursor: default;
+}
+
+.browse-card-open[aria-disabled="true"]:hover {
+	background: transparent;
+}
+
+/* SMALLER SCREENS */
+
+@media (max-width: 700px) {
+	.workspace-bar {
+		padding: 8px 12px;
+		gap: 8px;
+	}
+
+	.workspace-breadcrumbs,
+	.workspace-switcher,
+	.workspace-nav {
+		flex-basis: 100%;
+	}
+
+	.workspace-switcher select {
+		flex: 1;
+		width: auto;
+		min-height: 40px;
+		font-size: 16px;
+	}
+
+	.browse-grid {
+		gap: 12px;
+	}
+}
+
+.page-heading h1[tabindex="-1"]:focus {
+	outline: none;
 }

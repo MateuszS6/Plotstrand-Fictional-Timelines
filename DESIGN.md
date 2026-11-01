@@ -92,3 +92,12 @@ Apply relevant principles to this app. No specific third-party brand style has b
 - Show a clear text badge on universe cards to explain completeness/current coverage. Proposed labels are In progress and Up to date; agree their exact meanings before adding a field. Up to date should eventually make its coverage cutoff/date understandable.
 - Keep status independent from Public/Private. An incomplete timeline can be publicly readable; private/test timelines still need access protection. A status badge must never replace publication filtering or database permissions.
 - Do not infer completion from record counts or character life status. Keep the first implementation small and owner-controlled; consider franchise summaries only after universe-card status works.
+
+## Management usability and coverage — 1 November proposal
+
+- Use text badges In progress and Up to date on universe cards and timeline headers; these are manually curated coverage labels, independent of publication and fictional life/death. Keep private/test access controls.
+- Add Earth- to Marvel/DC card codes at display time without doubling an existing prefix or inventing a missing code.
+- Keep management Add toolbars sticky with opaque backgrounds and bring an opened inline editor into view. Use a project-title placement selector before considering drag-and-drop.
+- Small local SVG icons accompany readable labels; character Details and Timeline actions must be visually distinct. Preserve accessible names and touch targets.
+- Retain optional precision tracking guides, a connected-universe overview and fictional-universe status for later focused passes. Define story relationship semantics before drawing automatic connections.
+- Application/SQL edits remain user-applied from chat; these notes describe the reviewed proposal, not a deployed update.
