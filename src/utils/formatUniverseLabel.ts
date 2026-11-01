@@ -12,3 +12,20 @@ export function formatUniverseLabel(
 		universe.name.trim() ||
 		`Universe #${universeId}`;
 }
+
+export function formatUniverseCode(
+	code: string | null,
+	franchiseName: string
+): string | null {
+	const value = code?.trim();
+
+	if (!value) return null;
+
+	const usesEarthCodes = ["marvel", "dc"].includes(
+		franchiseName.trim().toLowerCase()
+	);
+
+	return usesEarthCodes && !/^earth[-\s]/i.test(value)
+		? "Earth-" + value
+		: value;
+}

@@ -150,14 +150,13 @@ export default function CharacterRow({
 						className="character-origin-link"
 						disabled={saving || !canOpenOrigin}
 						aria-label={
-							`Open ${character.alias} in ${originUniverse?.name ?? originLabel
-							}`
+							`Open ${character.alias} in ${originUniverse?.name ?? originLabel}`
 						}
 						title={
 							originUniverse && !canEdit && !originUniverse.is_published
 								? `${originUniverse.name}: timeline not published.`
 								: originUniverse
-									? `Open origin timeline: ${originUniverse.name} ${originUniverse.code ? `(${originUniverse.code})` : ""}`
+									? "Open origin timeline: " + originUniverse.name
 									: "Origin universe is outside the current franchise."
 						}
 						onClick={() => onOpenOrigin(character)}

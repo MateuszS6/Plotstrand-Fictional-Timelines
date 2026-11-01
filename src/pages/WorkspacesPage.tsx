@@ -1,12 +1,13 @@
 import { useState } from "react";
+import { Link } from "react-router";
+import TimelineStatus from "../components/layout/TimelineStatus";
 import type { WorkspaceFormValues } from "../components/workspaces/WorkspaceForm";
 import WorkspaceForm from "../components/workspaces/WorkspaceForm";
 import { useWorkspace } from "../context/WorkspaceContext";
 import type { Franchise } from "../types/franchise";
 import type { Universe } from "../types/universe";
-import { Link } from "react-router";
 import { workspacePath } from "../utils/workspacePath";
-import TimelineStatus from "../components/layout/TimelineStatus";
+import { formatUniverseCode } from "../utils/formatUniverseLabel";
 
 type Editor =
 	| { kind: "franchise"; record: Franchise | null; }
@@ -176,7 +177,10 @@ export default function WorkspacesPage({
 
 				<p className="browse-card-meta">
 					{universe
-						? universe.code || "Timeline"
+						? formatUniverseCode(
+							universe.code,
+							franchise?.name ?? ""
+						) || "Timeline"
 						: "Explore timelines"}
 
 					{universe && (

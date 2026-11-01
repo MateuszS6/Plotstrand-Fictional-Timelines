@@ -1,5 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { Navigate, useBlocker, useLocation, useNavigate } from 'react-router';
+import PageTitle from './components/layout/PageTitle';
+import TimelineStatus from './components/layout/TimelineStatus';
 import WorkspaceBar from './components/layout/WorkspaceBar';
 import TimelineGuide from './components/timeline/TimelineGuide';
 import { useWorkspace } from './context/WorkspaceContext';
@@ -11,8 +13,7 @@ import WorkspacesPage from './pages/WorkspacesPage';
 import type { Character } from './types/character';
 import type { WorkspaceView } from './types/workspace';
 import { workspacePath } from './utils/workspacePath';
-import PageTitle from './components/layout/PageTitle';
-import TimelineStatus from './components/layout/TimelineStatus';
+import { formatUniverseCode } from './utils/formatUniverseLabel';
 
 export default function App({
 	activeView
@@ -147,9 +148,10 @@ export default function App({
 				? "Manage characters for " + universeName
 				: activeView === "projects"
 					? "Projects in the chronology of " + universeName
-					: selectedFranchise?.name === "Marvel" &&
-						selectedUniverse?.code
-						? "Character lifelines for Earth-" + selectedUniverse.code
+					: selectedUniverse?.code
+						? "Character lifelines for " + formatUniverseCode(
+							selectedUniverse.code,
+							selectedFranchise?.name ?? "")
 						: "Character lifelines showing appearances across projects";
 
 	return (
