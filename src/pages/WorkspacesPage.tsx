@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router";
 import TimelineStatus from "../components/layout/TimelineStatus";
 import type { WorkspaceFormValues } from "../components/workspaces/WorkspaceForm";
@@ -6,8 +6,8 @@ import WorkspaceForm from "../components/workspaces/WorkspaceForm";
 import { useWorkspace } from "../context/WorkspaceContext";
 import type { Franchise } from "../types/franchise";
 import type { Universe } from "../types/universe";
-import { workspacePath } from "../utils/workspacePath";
 import { formatUniverseCode } from "../utils/formatUniverseLabel";
+import { workspacePath } from "../utils/workspacePath";
 
 type Editor =
 	| { kind: "franchise"; record: Franchise | null; }
@@ -37,6 +37,14 @@ export default function WorkspacesPage({
 	);
 
 	const [editor, setEditor] = useState<Editor | null>(null);
+	const pageRef = useRef<HTMLElement>(null);
+
+	useEffect(() => {
+		if (editor !== null) {
+			pageRef.current?.scrollTo({ top: 0 });
+		}
+	}, [editor]);
+
 	const [notice, setNotice] = useState<string | null>(null);
 	const [actionError, setActionError] = useState<string | null>(null);
 
@@ -234,6 +242,7 @@ export default function WorkspacesPage({
 
 	return (
 		<section
+			ref={pageRef}
 			className="management-page browse-page"
 			aria-label={atRoot ? "Franchises" : "Universes"}
 			aria-busy={savingWorkspace}

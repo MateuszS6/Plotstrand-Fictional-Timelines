@@ -6,8 +6,7 @@ interface ProjectFormProps {
 	project: Project | null;
 	universeId: number;
 	universes: Universe[];
-	initialPosition: number;
-	maxPosition: number;
+	projects: Project[],
 	onSave: (input: ProjectInput, position: number) => Promise<void>;
 	onCancel: () => void;
 }
@@ -16,8 +15,7 @@ export default function ProjectForm({
 	project,
 	universeId,
 	universes,
-	initialPosition,
-	maxPosition,
+	projects,
 	onSave,
 	onCancel
 }: ProjectFormProps) {
@@ -28,7 +26,20 @@ export default function ProjectForm({
 		project?.primary_universe_id ?? universeId
 	);
 
-	const [position, setPosition] = useState(String(initialPosition));
+	const otherProjects = projects.filter(
+		(item) => item.id !== project?.id
+	);
+
+	const [beforeId, setBeforeId] = useState(() => {
+		if (!project) return "";
+
+		const index = projects.findIndex(
+			(item) => item.id === project.id
+		);
+
+		return String(projects[index + 1]?.id ?? "");
+	});
+
 	const [saving, setSaving] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 
@@ -46,7 +57,11 @@ export default function ProjectForm({
 		if (savingRef.current) return;
 
 		const trimmedTitle = title.trim();
-		const nextPosition = Number(position);
+		const nextPosition = beforeId === ""
+			? otherProjects.length + 1
+			: otherProjects.findIndex(
+				(item) => String(item.id) === beforeId
+			) + 1;
 
 		if (!trimmedTitle) {
 			setError("Enter a project title.");
@@ -56,9 +71,9 @@ export default function ProjectForm({
 		if (
 			!Number.isInteger(nextPosition) ||
 			nextPosition < 1 ||
-			nextPosition > maxPosition
+			nextPosition > otherProjects.length + 1
 		) {
-			setError(`Choose a position between 1 and ${maxPosition}`);
+			setError("Choose where to place this project.");
 			return;
 		}
 
@@ -169,20 +184,24 @@ export default function ProjectForm({
 					</label>
 
 					<label className="form-field">
-						<span>Position in this timeline</span>
-						<input
-							type="number"
-							min={1}
-							max={maxPosition}
-							step={1}
-							value={position}
-							onChange={(event) => setPosition(event.target.value)}
-							required
-						/>
-						<small>
-							1 is the beginning; {maxPosition} is the end.
-							Other projects shift automatically.
-						</small>
+						<span>Place in this timeline</span>
+
+						<select
+							value={beforeId}
+							onChange={(event) => setBeforeId(event.target.value)}
+						>
+							{otherProjects.map((item) => (
+								<option key={item.id} value={String(item.id)}>
+									Before {item.title}
+								</option>
+							))}
+
+							<option value="">
+								{otherProjects.length ? "At the end" : "First project"}
+							</option>
+						</select>
+
+						<small>Other projects shift automically.</small>
 					</label>
 				</div>
 

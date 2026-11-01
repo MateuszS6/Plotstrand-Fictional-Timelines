@@ -49,9 +49,9 @@ export default function TimelineMarkers({
 					`}
 					title={
 						appearance.appearance_type.replaceAll("_", " ") +
-						(appearance.is_detached ? " - detached" : "") +
+						(appearance.is_detached ? " — detached" : "") +
 						(mergedEvent
-							? ` - ${eventLabel} at this project`
+							? ` — ${eventLabel} at this project`
 							: "")
 					}
 				>

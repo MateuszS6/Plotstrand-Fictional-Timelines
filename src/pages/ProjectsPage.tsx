@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
+import ProjectForm from "../components/projects/ProjectForm";
+import { useWorkspace } from "../context/WorkspaceContext";
 import { deleteProject, getProjectsForPrimaryUniverses, getProjectsForUniverse, linkProjectToUniverse, saveProjectInUniverse, unlinkProjectToUniverse } from "../services/projects";
 import type { Project, ProjectInput } from "../types/project";
-import { useWorkspace } from "../context/WorkspaceContext";
-import ProjectForm from "../components/projects/ProjectForm";
 import { formatUniverseLabel } from "../utils/formatUniverseLabel";
 
 interface ProjectsPageProps {
@@ -20,6 +20,14 @@ export default function ProjectsPage({
 	const [loadAttempt, setLoadAttempt] = useState(0);
 
 	const [editor, setEditor] = useState<Project | "new" | null>(null);
+	const pageRef = useRef<HTMLElement>(null);
+
+	useEffect(() => {
+		if (editor !== null) {
+			pageRef.current?.scrollTo({ top: 0 });
+		}
+	}, [editor]);
+
 	const [notice, setNotice] = useState<string | null>(null);
 	const [actionError, setActionError] = useState<string | null>(null);
 
@@ -118,7 +126,7 @@ export default function ProjectsPage({
 			);
 		});
 
-		setNotice(`${input.title} saved at position ${position}.`);
+		setNotice(`${input.title} saved.`);
 		setEditor(null);
 	}
 
@@ -256,7 +264,11 @@ export default function ProjectsPage({
 	}
 
 	return (
-		<section className="management-page" aria-label="Projects">
+		<section
+			ref={pageRef}
+			className="management-page"
+			aria-label="Projects"
+		>
 			<div className="management-toolbar">
 				<p className="management-summary">
 					{projects.length}{" "}
@@ -292,18 +304,7 @@ export default function ProjectsPage({
 					project={editor === "new" ? null : editor}
 					universeId={universeId}
 					universes={universes}
-					initialPosition={
-						editor === "new"
-							? projects.length + 1
-							: projects.findIndex(
-								(project) => project.id === editor.id
-							) + 1
-					}
-					maxPosition={
-						editor === "new"
-							? projects.length + 1
-							: projects.length
-					}
+					projects={projects}
 					onSave={handleSave}
 					onCancel={() => setEditor(null)}
 				/>
@@ -335,7 +336,7 @@ export default function ProjectsPage({
 
 							{availableProjects.map((project) => (
 								<option key={project.id} value={project.id}>
-									{project.title}{" - "}
+									{project.title}{" — "}
 									{formatUniverseLabel(
 										project.primary_universe_id,
 										universes

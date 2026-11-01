@@ -31,6 +31,14 @@ export default function CharactersPage({
 	const [loadAttempt, setLoadAttempt] = useState(0);
 
 	const [editor, setEditor] = useState<Character | "new" | null>(null);
+	const pageRef = useRef<HTMLElement>(null);
+
+	useEffect(() => {
+		if (editor !== null) {
+			pageRef.current?.scrollTo({ top: 0 });
+		}
+	}, [editor]);
+
 	const [notice, setNotice] = useState<string | null>(null);
 
 	const [timelineCharacterIds, setTimelineCharacterIds] = useState<number[]>([]);
@@ -181,7 +189,11 @@ export default function CharactersPage({
 	}
 
 	return (
-		<section className="management-page" aria-label="Characters">
+		<section
+			ref={pageRef}
+			className="management-page"
+			aria-label="Characters"
+		>
 			<div className="management-toolbar">
 				<p className="management-summary">
 					{visibleCharacters.length}{" "}

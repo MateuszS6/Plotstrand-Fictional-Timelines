@@ -24,6 +24,12 @@
 	justify-content: space-between;
 	flex-wrap: wrap;
 	gap: 12px;
+	position: sticky;
+	top: 0;
+	z-index: 2;
+	padding: 8px 0;
+	border-bottom: 1px solid var(--border-primary);
+	background: var(--surface-base);
 }
 
 .management-section-title {

@@ -1,6 +1,7 @@
 import { Link, useNavigate } from "react-router";
 import { useWorkspace } from "../../context/WorkspaceContext";
 import type { WorkspaceView } from "../../types/workspace";
+import { formatUniverseCode } from "../../utils/formatUniverseLabel";
 import { workspacePath } from "../../utils/workspacePath";
 
 const views: { value: WorkspaceView; label: string }[] = [
@@ -96,7 +97,9 @@ export default function WorkspaceBar({
 								{!universe.is_published ? "🔒︎ Private — " : ""}
 								{universe.name}
 								{universe.code
-									? " (" + universe.code + ")"
+									? " (" + formatUniverseCode(
+										universe.code,
+										franchise?.name ?? "") + ")"
 									: ""}
 							</option>
 						))}
