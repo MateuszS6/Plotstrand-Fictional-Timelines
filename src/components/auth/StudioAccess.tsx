@@ -141,7 +141,7 @@ export default function StudioAccess({
 	const brand = (
 		<div className="session-brand">
 			<img
-				className="session-brand"
+				className="session-logo"
 				src="/brand/logo.png"
 				alt=""
 				width={32}

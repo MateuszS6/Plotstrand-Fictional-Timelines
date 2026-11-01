@@ -164,6 +164,19 @@
 	color: var(--color-danger);
 }
 
+.utility-button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 6px;
+}
+
+.utility-icon {
+	width: 16px;
+	height: 16px;
+	flex-shrink: 0;
+}
+
 .utility-button-danger {
 	color: var(--color-danger);
 }

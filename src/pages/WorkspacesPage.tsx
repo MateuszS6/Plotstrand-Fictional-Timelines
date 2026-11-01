@@ -8,6 +8,7 @@ import type { Franchise } from "../types/franchise";
 import type { Universe } from "../types/universe";
 import { formatUniverseCode } from "../utils/formatUniverseLabel";
 import { workspacePath } from "../utils/workspacePath";
+import UtilityIcon from "../components/layout/UtilityIcon";
 
 type Editor =
 	| { kind: "franchise"; record: Franchise | null; }
@@ -222,7 +223,7 @@ export default function WorkspacesPage({
 								}
 							)}
 						>
-							Edit
+							<UtilityIcon name="edit" /> Edit
 						</button>
 
 						<button
@@ -232,7 +233,7 @@ export default function WorkspacesPage({
 							aria-label={"Delete " + record.name}
 							onClick={() => handleDelete(kind, record)}
 						>
-							Delete
+							<UtilityIcon name="delete" /> Delete
 						</button>
 					</div>
 				)}
@@ -265,7 +266,7 @@ export default function WorkspacesPage({
 							openEditor({ kind, record: null })
 						}
 					>
-						Add {kind}
+						<UtilityIcon name="add" /> Add {kind}
 					</button>
 				</div>
 			)}

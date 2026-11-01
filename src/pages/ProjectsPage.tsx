@@ -4,6 +4,7 @@ import { useWorkspace } from "../context/WorkspaceContext";
 import { deleteProject, getProjectsForPrimaryUniverses, getProjectsForUniverse, linkProjectToUniverse, saveProjectInUniverse, unlinkProjectToUniverse } from "../services/projects";
 import type { Project, ProjectInput } from "../types/project";
 import { formatUniverseLabel } from "../utils/formatUniverseLabel";
+import UtilityIcon from "../components/layout/UtilityIcon";
 
 interface ProjectsPageProps {
 	universeId: number;
@@ -282,7 +283,7 @@ export default function ProjectsPage({
 					disabled={controlsDisabled}
 					onClick={() => openEditor("new")}
 				>
-					Add project
+					<UtilityIcon name="add" /> Add project
 				</button>
 			</div>
 
@@ -398,7 +399,7 @@ export default function ProjectsPage({
 												aria-label={`Edit ${project.title}`}
 												onClick={() => openEditor(project)}
 											>
-												Edit
+												<UtilityIcon name="edit" /> Edit
 											</button>
 
 											<button
@@ -419,9 +420,8 @@ export default function ProjectsPage({
 												aria-label={`Delete ${project.title}`}
 												onClick={() => handleDelete(project)}
 											>
-												{deletingId === project.id
-													? "Deleting..."
-													: "Delete"}
+												<UtilityIcon name="delete" />
+												{deletingId === project.id ? "Deleting..." : "Delete"}
 											</button>
 										</div>
 									</td>

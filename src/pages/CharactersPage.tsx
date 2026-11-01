@@ -5,6 +5,7 @@ import { createCharacter, deleteCharacter, getCharactersForUniverses, updateChar
 import { getTimelineCharacterIds } from "../services/timelineCharacters";
 import type { Character, CharacterInput } from "../types/character";
 import { formatUniverseLabel } from "../utils/formatUniverseLabel";
+import UtilityIcon from "../components/layout/UtilityIcon";
 
 interface CharactersPageProps {
 	universeId: number;
@@ -206,7 +207,7 @@ export default function CharactersPage({
 					disabled={controlsDisabled}
 					onClick={() => openEditor("new")}
 				>
-					Add character
+					<UtilityIcon name="add" /> Add character
 				</button>
 			</div>
 
@@ -280,10 +281,10 @@ export default function CharactersPage({
 													type="button"
 													className="utility-button"
 													disabled={controlsDisabled}
-													aria-label={`Edit ${character.alias}`}
+													aria-label={`Edit details for ${character.alias}`}
 													onClick={() => openEditor(character)}
 												>
-													Edit
+													<UtilityIcon name="edit" /> Edit
 												</button>
 
 												<button
@@ -293,7 +294,7 @@ export default function CharactersPage({
 													aria-label={`Edit ${character.alias} on this timeline`}
 													onClick={() => onEditTimeline(character)}
 												>
-													Edit on timeline
+													<UtilityIcon name="timeline" /> Edit on timeline
 												</button>
 
 												<button
@@ -303,6 +304,7 @@ export default function CharactersPage({
 													aria-label={`Delete ${character.alias}`}
 													onClick={() => handleDeleteCharacter(character)}
 												>
+													<UtilityIcon name="delete" />
 													{isChanging ? "Deleting..." : "Delete"}
 												</button>
 											</div>
