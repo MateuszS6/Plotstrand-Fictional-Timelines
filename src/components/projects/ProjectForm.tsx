@@ -201,7 +201,7 @@ export default function ProjectForm({
 							</option>
 						</select>
 
-						<small>Other projects shift automically.</small>
+						<small>Other projects shift automatically.</small>
 					</label>
 				</div>
 

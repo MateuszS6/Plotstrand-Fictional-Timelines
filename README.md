@@ -7,17 +7,15 @@ Inspired by an Excel workflow, Plotstrand uses character rows,
 chronological project columns and visual lifelines to track appearances
 and events within each universe.
 
-## Current version — `0.5.0 Public Preview`
+## Current version — `0.6.0`
 
-Shareable timeline links, browser navigation and a featured Marvel entry.
-Owner-only Studio editing and selectively published timelines.
-Solidified branding.
+Timeline coverage badges, clearer universe codes, project placement by title and faster management controls.
 
 See the [development plan](docs/development-plan.md).
 
 > ![Franchises](docs/images/v0.5.0-marvel-featured.png)
 
-> ![Universes](docs/images/v0.5.0-studio-marvel.png)
+> ![Universes](docs/images/v0.6.0-badges-&-icons.png)
 
 > ![Timeline Viewer](docs/images/v0.5.0-viewer-timeline.png)
 
@@ -45,5 +43,6 @@ Supabase is the source of truth. Files in [docs/supabase](docs/supabase) are
 database references, not files the app runs to create its database. They were
 refreshed from read-only live metadata on 20 October 2026 and include the
 universe-specific entry constraints, publication policies and application functions.
+The coverage-status column and constraint were additionally verified on 1 November 2026.
 They are reference snapshots rather than complete database backups.
 
