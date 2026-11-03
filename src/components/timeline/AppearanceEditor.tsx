@@ -62,10 +62,14 @@ export default function AppearanceEditor({
 
 		updatePosition();
 
+		const resizeObserver = new ResizeObserver(updatePosition);
+		if (editorRef.current) resizeObserver.observe(editorRef.current);
+
 		window.addEventListener("resize", updatePosition);
 		window.addEventListener("scroll", updatePosition, true);
 
 		return () => {
+			resizeObserver.disconnect();
 			window.removeEventListener("resize", updatePosition);
 			window.removeEventListener("scroll", updatePosition, true);
 		};

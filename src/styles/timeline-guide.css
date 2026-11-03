@@ -2,8 +2,21 @@
 	flex-shrink: 0;
 }
 
-.timeline-tools .utility-button {
-	min-height: 36px;
+.timeline-tools .timeline-guide-button {
+	min-height: 44px;
+	padding: 8px 12px;
+	border-color: var(--color-link);
+	color: var(--color-link);
+	font-weight: 600;
+}
+
+.timeline-guide-button>span {
+	display: grid;
+	place-items: center;
+	width: 22px;
+	height: 22px;
+	border: 1px solid currentColor;
+	border-radius: 50%;
 }
 
 .appearance-editor.timeline-legend-popup {
@@ -35,9 +48,21 @@
 	padding: 0 16px 16px;
 }
 
-.timeline-legend-popup h3 {
-	margin: 18px 0 10px;
+.legend-section {
+	margin-top: 12px;
+	border-top: 1px solid var(--border-primary);
+}
+
+.legend-section>summary {
+	padding: 10px 0;
 	font-size: 14px;
+	font-weight: 600;
+	cursor: pointer;
+}
+
+.legend-section>summary:focus-visible {
+	outline: 2px solid var(--color-link);
+	outline-offset: 2px;
 }
 
 .legend-copy {
