@@ -1,6 +1,43 @@
-# Timeline Studio development plan
+# Plotstrand development plan
 
-Updated 30 October 2026. Routing, the featured Marvel card, the review corrections and vercel.json are implemented and reviewed as v0.5.0. The next step is a small release-preparation pass and the first hosted deployment; no deployment has been made by the assistant.
+Updated 2 November 2026. The user has published the initial Vercel preview. Package metadata and README now identify v0.6.0: coverage badges and management usability are implemented and locally reviewed. The latest hosted deployment has not been independently verified. Studio search is now applied and locally reviewed. A small mobile summary-width correction is supplied in chat for the user to apply.
+
+## Active backlog — consolidated 2 November 2026
+
+This section is the current work list. Dated sections below retain historical decisions and reviews; older references to the next pass or package version describe their dates, not the current state. Future items are not all commitments for the next pass.
+
+- **Implemented and reviewed: Studio search.** Search characters by alias, full name and origin name/code within the current view; the existing Include other characters in this franchise checkbox expands that view. Search linked projects by title. Preserve real project order numbers and use the full list for placement when creating/editing. Include result counts, an empty-results message, clear control and narrow-screen layout. Filter loaded records locally; no new database field, service or search dependency. Searching the unlinked-project library picker is a separate follow-up.
+- **Mobile appearance editor — requested 2 November.** Provide a touch control to open the appearance/event editor in Studio. Evaluate the user's suggestion of holding a cell, alongside a discoverable Edit action. Preserve timeline swiping and zooming; a hold must cancel when scrolling begins and must not accidentally create an appearance. Viewer remains read-only. Choose the interaction with the user when prioritising the next management-usability pass; this is recorded, not implemented.
+- **Project ordering.** Drag-and-drop remains requested, with touch/keyboard alternatives and clear save/error behaviour when implemented. Keep the current Before [title]/At the end placement option. Direct placement while linking an existing project is still a follow-up; that action currently appends. Retain numeric timeline_position and atomic ordering rather than introducing a linked list.
+- **Project exploration.** Consider clicking a timeline project heading to open useful read-only project details, analogous to character details. Start from available title, release date and primary origin, optionally timeline-local participation. Only add the panel if it improves exploration; do not introduce a largely empty metadata system merely for symmetry.
+- **Project media types — requested 2 November.** Visually distinguish film/show/video/etc. Store one media-type field on the shared project record (provisional name media_type), editable in Studio and shown as a Type column in project management. Give timeline project headings a small consistent type label/icon; avoid relying on colour alone. Agree the exact choices, including whether shows represent series/seasons/episodes and how to handle existing uncategorised projects, before supplying the database/application pass. Do not infer a type from the title or automatically label all existing projects as films. This is backlog work, not implemented by the search review.
+- **Sorting, grouping and views.** Character-row sorting/grouping/filtering and possible view presets remain requested for large timelines. Studio search is now implemented; Viewer search/filter controls can follow. Agree grouping rules and scope before adding storage. Project release-order browsing is a distinct decision because changing columns also changes chronology/continuity interpretation.
+- **Universes and other multiversal locations.** TVA, the Void and the Citadel can use the existing universe record as a named chronology/location without a code. A record need not be a literal universe or have an Earth designation. The user wants a subtle distinction for these locations; decide a small optional category/badge and public wording in a later pass, not a second parallel table. Do not fabricate codes or blindly classify every Marvel/DC setting as an Earth. Origin and timeline location remain separate.
+- **Watcher origin and residence.** Record the user's distinction: Fifth Dimension as origin, Observational Plane as residence/setting, with visits/interference recorded on the affected timelines. The origin label should remain appropriate across those timelines. This is the user's intended model, not a newly verified canon claim. A named record with no code already supplies an origin label; later richer location metadata must not silently substitute residence for origin.
+- **Status and continuity.** Character name-side deceased/unknown indicators, optional ongoing connectors and fictional universe active/destroyed/unknown status still need agreed chronological and cross-universe rules. Footage, visions, afterlife and missing appearances must not imply survival/death. Keep these separate from manual In progress/Up to date coverage and Public/Private access. Coverage cutoff/date clarification may be revisited if needed.
+- **Timeline orientation and multiverse overview.** Toggleable faint row/column tracking guides remain planned, including pointer/keyboard/touch behaviour. A connected universe-card overview is requested; first define whether edges mean branch origins, travel or another deliberate story relationship. Shared projects/database links alone do not establish such relationships. Combined character journeys and entry/departure markers remain optional later work.
+- **Viewer contributions.** Let viewers propose timeline corrections for owner approval/rejection. Pending proposals must not directly edit published data. Agree identity/friction, supporting context, abuse handling, stale/conflicting changes and review history before implementation.
+- **Metadata, presentation and quality.** Richer character/project metadata, then people/cast/crew/credits; distinctive franchise themes/gradients and final custom icons; further management-layout polish; real-phone Viewer checks and explicit touch access to Studio's advanced editor. Continue measured code simplification, bundle/performance and database optimisation between features.
+- **Parked decisions.** Force-deleting a universe is not currently needed and would require explicit scope, particularly for visiting characters. Keep character_events.id unless a concrete dependency-reviewed change is worthwhile. Do not reintroduce show/hide membership or a universe_characters table for these requests.
+
+### Search pass preparation — 2 November 2026
+
+- Reviewed the current CharactersPage, ProjectsPage, management styles and origin formatter. Search can be added to just those two pages and their stylesheet using existing loaded data.
+- The proposed source passes both TypeScript configurations, lint and a focused browser fixture with sample services: alias/full-name/origin/title matching, case/outer-whitespace handling, empty results and clear, the existing character scope checkbox, real project positions, full placement choices while filtered and phone layout. Search performs no database mutations.
+- Prepared changes stay outside application source and are supplied in chat. The user has not yet applied this search pass. No live database access or mutation was needed.
+- The earlier ProjectForm helper typo is now fixed, and package/README version is now 0.6.0. Leave README release claims at the applied version until the next change is reviewed and shipped.
+
+
+
+### Applied search review and mobile wrapping — 2 November 2026
+
+- The user applied Studio search. Both TypeScript configurations, lint and the actual-source production build pass. The existing bundle-size advisory remains non-blocking (about 559 kB minified / 161 kB gzip).
+- Actual components pass the focused sample-data browser checks: title, alias, full-name and origin searches; case/outer whitespace; empty results and clear; existing character-scope checkbox; original project order numbers; full placement choices while filtered; and narrow-screen layout. No live database access or writes were needed.
+- Reproduced horizontal scrolling inside the Studio franchise browsing area: the management-summary paragraph retains roughly 382px of width because flex-shrink is 0. At a 390px viewport its available width is only 356px. flex-wrap moves flex items onto lines but does not cap an oversized item's width.
+- Proposed correction: add max-width: 100% and overflow-wrap: anywhere to the existing management-summary rule. The width cap lets ordinary prose wrap, and overflow-wrap also handles long unbroken text. Keep the existing flex-shrink: 0 so summaries used directly in a column layout retain their height. Do not hide horizontal overflow globally; timelines and management tables still need deliberate horizontal scrolling.
+- The CSS correction was checked locally at 320, 360, 390 and 430px across Studio/Viewer franchise and universe browsing, plus desktop. The exact universe-page overflow was not reproduced with the sample universe copy, but the shared rule provides the same width limit there. Browser-injected CSS was used; application source is unchanged and the user still needs to apply those two declarations.
+- Added project media types to the active backlog and design notes. README release/version claims remain unchanged.
+
 
 ## Working agreement
 
@@ -10,7 +47,7 @@ Updated 30 October 2026. Routing, the featured Marvel card, the review correctio
 - Supabase is the source of truth. Files under docs/supabase are reference snapshots, not automatically applied migrations or complete live exports.
 - The current checkout is C:/Users/matbu/Documents/Projects/Fictional-Media-Timeline-Viewer.
 
-## Current baseline: v0.5.0 routing and browsing applied
+## Historical baseline: v0.5.0 routing and browsing applied
 
 - The app opens in read-only Viewer mode on franchise cards. A franchise with one published universe opens directly; otherwise universe cards are shown. Only explicitly published timelines are selectable; new universes default to private. Participating visitors' origin names/codes may be readable even when those origins are private, but their private timeline entries remain hidden.
 - The Studio requires the configured owner account. Public signup remains disabled. Anonymous and authenticated non-owner access is limited to published content; writes remain owner-only. The Studio button opens sign-in, and the owner can return to Viewer without signing out.

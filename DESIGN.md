@@ -51,7 +51,7 @@ A personal tool for building fictional timelines and a public viewer for explori
 ## Interaction and accessibility
 
 - Viewer entries open details on click/tap or Enter/Space; empty cells do not edit.
-- Preserve the Studio's existing editing behaviour. A later phone pass must expose its right-click editor through an explicit touch-accessible control.
+- Preserve the Studio's existing editing behaviour. Provide touch access to its appearance/event editor: the user suggested holding a cell on 2 November. Evaluate that gesture alongside a discoverable Edit action, preserving swipe/zoom and cancelling a hold on movement. Agree the interaction before implementation; Viewer stays read-only.
 - Verify grid swiping, comfortable tap targets, sticky labels, popups, portrait/landscape and pinch zoom on real phones before broad outreach.
 - Provide clear focus outlines and descriptive names for controls.
 - Legend & help is available on demand. Explain every appearance/event type, attachment, arrow, chronology, visitor origins and interaction.
@@ -101,3 +101,16 @@ Apply relevant principles to this app. No specific third-party brand style has b
 - Small local SVG icons accompany readable labels; character Details and Timeline actions must be visually distinct. Preserve accessible names and touch targets.
 - Retain optional precision tracking guides, a connected-universe overview and fictional-universe status for later focused passes. Define story relationship semantics before drawing automatic connections.
 - Application/SQL edits remain user-applied from chat; these notes describe the reviewed proposal, not a deployed update.
+
+
+## Studio search and non-universe locations — 2 November 2026
+
+- Coverage badges and the previous management-usability proposal have been applied and reviewed as v0.6.0. Studio search is now applied and reviewed in the existing sticky Characters/Projects toolbars, with a visible label, clear action, counts and useful empty results. Keep full timeline positions in a filtered project list. Wrap the controls on phones; preserve the existing character scope checkbox.
+- A timeline may describe a universe or a named multiversal location such as TVA, the Void or the Citadel. Optional future category/badge wording should make that distinction without requiring a designation or a second location system. Blank codes remain blank. An origin label is not a character's current residence; preserve the Watcher origin/residence distinction recorded in the development plan.
+- Clicking a project heading for details is a requested optional exploration improvement. Design it around useful existing data and the current detail-panel conventions when that focused pass begins.
+
+
+## Project media types and mobile wrapping — 2 November 2026
+
+- Backlog: distinguish films, shows, videos and other agreed project types with a shared project field, an editable Studio choice/Type column and a restrained label/icon on timeline headings. Settle categories and existing-record handling in the implementation pass; do not use colour as the only distinction.
+- Browsing-toolbar summaries must fit their container before text wrapping can work. The reviewed correction adds max-width: 100% and overflow-wrap: anywhere to management-summary, preserving vertical height in column layouts and intentional horizontal scrolling for timeline/table content. This CSS correction remains user-applied from chat.

@@ -20,6 +20,8 @@ export default function ProjectsPage({
 	const [error, setError] = useState<string | null>(null);
 	const [loadAttempt, setLoadAttempt] = useState(0);
 
+	const [search, setSearch] = useState("");
+
 	const [editor, setEditor] = useState<Project | "new" | null>(null);
 	const pageRef = useRef<HTMLElement>(null);
 
@@ -49,6 +51,17 @@ export default function ProjectsPage({
 	const availableProjects = libraryProjects.filter((project) =>
 		!projects.some((linked) => linked.id === project.id)
 	);
+
+	const query = search.trim().toLowerCase();
+
+	const matchingProjects = projects
+		.map((project, index) => ({
+			project,
+			position: index + 1
+		}))
+		.filter(({ project }) =>
+			project.title.toLowerCase().includes(query)
+		);
 
 	useEffect(() => {
 		let cancelled = false;
@@ -271,7 +284,28 @@ export default function ProjectsPage({
 			aria-label="Projects"
 		>
 			<div className="management-toolbar">
+				<label className="form-field management-search">
+					<span>Search projects</span>
+					<input
+						type="search"
+						value={search}
+						onChange={(event) => setSearch(event.target.value)}
+						placeholder="Project title"
+					/>
+				</label>
+
+				{search && (
+					<button
+						type="button"
+						className="utility-button"
+						onClick={() => setSearch("")}
+					>
+						Clear search
+					</button>
+				)}
+
 				<p className="management-summary">
+					{query && `${matchingProjects.length} of `}
 					{projects.length}{" "}
 					{projects.length === 1 ? "project" : "projects"}
 					{" · In chronological order"}
@@ -363,9 +397,12 @@ export default function ProjectsPage({
 				</fieldset>
 			</form>
 
-			{projects.length === 0 ? (
+			{matchingProjects.length === 0 ? (
 				<p className="status-message">
-					No projects are linked to this universe.
+					{projects.length === 0
+						? "No projects are linked to this universe."
+						: "No linked projects match your search. Clear it or try another title."
+					}
 				</p>
 			) : (
 				<div className="management-table-container">
@@ -381,9 +418,9 @@ export default function ProjectsPage({
 						</thead>
 
 						<tbody>
-							{projects.map((project, index) => (
+							{matchingProjects.map(({ project, position }) => (
 								<tr key={project.id}>
-									<td>{index + 1}</td>
+									<td>{position}</td>
 									<td>{project.title}</td>
 									<td>{project.release_date ?? "Not set"}</td>
 									<td>

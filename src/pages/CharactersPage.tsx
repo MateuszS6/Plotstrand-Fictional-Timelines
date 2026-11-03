@@ -31,6 +31,8 @@ export default function CharactersPage({
 	const [error, setError] = useState<string | null>(null);
 	const [loadAttempt, setLoadAttempt] = useState(0);
 
+	const [search, setSearch] = useState("");
+
 	const [editor, setEditor] = useState<Character | "new" | null>(null);
 	const pageRef = useRef<HTMLElement>(null);
 
@@ -56,6 +58,21 @@ export default function CharactersPage({
 		character.origin_universe_id === universeId ||
 		timelineCharacterIds.includes(character.id)
 	);
+
+	const query = search.trim().toLowerCase();
+
+	const matchingCharacters = visibleCharacters.filter((character) => {
+		const origin = universes.find((universe) =>
+			universe.id === character.origin_universe_id
+		);
+
+		return [
+			character.alias,
+			character.real_name,
+			origin?.name,
+			origin?.code
+		].some((value) => value?.toLowerCase().includes(query));
+	});
 
 	useEffect(() => {
 		let cancelled = false;
@@ -196,7 +213,28 @@ export default function CharactersPage({
 			aria-label="Characters"
 		>
 			<div className="management-toolbar">
+				<label className="form-field management-search">
+					<span>Search characters</span>
+					<input
+						type="search"
+						value={search}
+						onChange={(event) => setSearch(event.target.value)}
+						placeholder="Alias, full name or origin"
+					/>
+				</label>
+
+				{search && (
+					<button
+						type="button"
+						className="utility-button"
+						onClick={() => setSearch("")}
+					>
+						Clear search
+					</button>
+				)}
+
 				<p className="management-summary">
+					{query && `${matchingCharacters.length} of `}
 					{visibleCharacters.length}{" "}
 					{visibleCharacters.length === 1 ? "character" : "characters"}
 				</p>
@@ -244,9 +282,12 @@ export default function CharactersPage({
 				{" Include other characters in this franchise."}
 			</label>
 
-			{visibleCharacters.length === 0 ? (
+			{matchingCharacters.length === 0 ? (
 				<p className="status-message">
-					No characters match this view. Include other universes to find more.
+					{query
+						? "No characters match your search. Try another name or include other characters in this franchise."
+						: "No characters match this view. Include other universes to find more."
+					}
 				</p>
 			) : (
 				<div className="management-table-container">
@@ -262,7 +303,7 @@ export default function CharactersPage({
 						</thead>
 
 						<tbody>
-							{visibleCharacters.map((character) => {
+							{matchingCharacters.map((character) => {
 								const isParticipating = timelineCharacterIds.includes(character.id);
 								const isChanging = changingCharacterId === character.id;
 
