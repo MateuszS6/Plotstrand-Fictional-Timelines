@@ -107,7 +107,7 @@ export default function CharacterForm({
 					</label>
 
 					<label className="form-field">
-						<span>Origin universe</span>
+						<span>Origin</span>
 						<select
 							value={originUniverseId}
 							onChange={(event) =>

@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from "react";
+import UtilityIcon from "../components/layout/UtilityIcon";
 import ProjectForm from "../components/projects/ProjectForm";
 import { useWorkspace } from "../context/WorkspaceContext";
 import { deleteProject, getProjectsForPrimaryUniverses, getProjectsForUniverse, linkProjectToUniverse, saveProjectInUniverse, unlinkProjectToUniverse } from "../services/projects";
 import type { Project, ProjectInput } from "../types/project";
 import { formatUniverseLabel } from "../utils/formatUniverseLabel";
-import UtilityIcon from "../components/layout/UtilityIcon";
 
 interface ProjectsPageProps {
 	universeId: number;
@@ -308,7 +308,7 @@ export default function ProjectsPage({
 					{query && `${matchingProjects.length} of `}
 					{projects.length}{" "}
 					{projects.length === 1 ? "project" : "projects"}
-					{" · In chronological order"}
+					{!query && " · In chronological order"}
 				</p>
 
 				<button

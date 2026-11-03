@@ -137,8 +137,7 @@ export default function WorkspaceForm({
 							</select>
 
 							<small>
-								Choose this manually. It describes timeline coverage,
-								not whether the universe still exists in the story.
+								How complete the timeline is. Public visibility is set separately.
 							</small>
 						</label>
 					)}

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router";
 import TimelineStatus from "../components/layout/TimelineStatus";
+import UtilityIcon from "../components/layout/UtilityIcon";
 import type { WorkspaceFormValues } from "../components/workspaces/WorkspaceForm";
 import WorkspaceForm from "../components/workspaces/WorkspaceForm";
 import { useWorkspace } from "../context/WorkspaceContext";
@@ -8,7 +9,6 @@ import type { Franchise } from "../types/franchise";
 import type { Universe } from "../types/universe";
 import { formatUniverseCode } from "../utils/formatUniverseLabel";
 import { workspacePath } from "../utils/workspacePath";
-import UtilityIcon from "../components/layout/UtilityIcon";
 
 type Editor =
 	| { kind: "franchise"; record: Franchise | null; }
@@ -250,12 +250,6 @@ export default function WorkspacesPage({
 		>
 			{canEdit && (
 				<div className="management-toolbar">
-					<p className="management-summary">
-						{atRoot
-							? "Manage franchises here; open one to manage its universes."
-							: "Private timelines are only available in Studio."}
-					</p>
-
 					<button
 						type="button"
 						className="utility-button"

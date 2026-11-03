@@ -296,7 +296,7 @@ export default function CharactersPage({
 							<tr>
 								<th scope="col">Character</th>
 								<th scope="col">Real name</th>
-								<th scope="col">Origin universe</th>
+								<th scope="col">Origin</th>
 								<th scope="col">Timeline</th>
 								<th scope="col">Actions</th>
 							</tr>

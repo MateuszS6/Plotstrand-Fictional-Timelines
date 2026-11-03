@@ -200,8 +200,6 @@ export default function ProjectForm({
 								{otherProjects.length ? "At the end" : "First project"}
 							</option>
 						</select>
-
-						<small>Other projects shift automatically.</small>
 					</label>
 				</div>
 

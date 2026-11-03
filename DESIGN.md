@@ -114,3 +114,10 @@ Apply relevant principles to this app. No specific third-party brand style has b
 
 - Backlog: distinguish films, shows, videos and other agreed project types with a shared project field, an editable Studio choice/Type column and a restrained label/icon on timeline headings. Settle categories and existing-record handling in the implementation pass; do not use colour as the only distinction.
 - Browsing-toolbar summaries must fit their container before text wrapping can work. The reviewed correction adds max-width: 100% and overflow-wrap: anywhere to management-summary, preserving vertical height in column layouts and intentional horizontal scrolling for timeline/table content. This CSS correction remains user-applied from chat.
+
+## Clarity pass proposal — 3 November 2026
+
+- Remove repeated browsing-toolbar prose while retaining search counts and warnings that explain write scope. Use Origin as the character label so named multiversal locations fit naturally.
+- A more prominent Timeline guide button opens a compact guide with three native collapsible sections, all initially closed. Keep real timeline symbols, concise explanations, a fixed heading and scrolling body. Observe popup size changes so expanding sections preserves viewport positioning.
+- Recommend touch tap to open Studio's cell editor; retain mouse shortcuts. Agree this change with the user before implementation. Press-and-hold is an alternative to evaluate, not a requirement. Preserve swiping and Viewer read-only behaviour.
+- A Universe versus Location/realm badge/category is a pending product choice. No new category field is part of the prepared copy/help cleanup.

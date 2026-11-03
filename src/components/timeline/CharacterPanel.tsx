@@ -141,7 +141,7 @@ export default function CharacterPanel({
 					)}
 
 					<div>
-						<dt>Origin universe</dt>
+						<dt>Origin</dt>
 						<dd>
 							{origin?.name ?? "Origin unavailable"}
 
@@ -189,8 +189,7 @@ export default function CharacterPanel({
 				</p>
 
 				<p className="character-panel-note">
-					In this timeline's project order.
-					Detached appearances are included.
+					In chronological order. Includes detached appearances.
 				</p>
 
 				{entries.length === 0 ? (
