@@ -1,8 +1,8 @@
 import type { Session } from "@supabase/supabase-js";
 import type { SubmitEvent } from "react";
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import { supabase } from "../../config/supabase";
 import { useLocation, useNavigate } from "react-router";
+import { supabase } from "../../config/supabase";
 import PageTitle from "../layout/PageTitle";
 
 interface OwnerCheck {
@@ -167,7 +167,7 @@ export default function StudioAccess({
 				setActionError(null);
 			}}
 		>
-			Back to viewer
+			Viewer
 		</button>
 	)
 

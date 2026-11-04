@@ -99,6 +99,12 @@
 	cursor: default;
 }
 
+/* Heading */
+
+.page-heading h1[tabindex="-1"]:focus {
+	outline: none;
+}
+
 /* Browsing & cards */
 
 .browse-grid {
@@ -301,6 +307,19 @@ a[aria-disabled="true"] {
 		flex-basis: 100%;
 	}
 
+	.workspace-breadcrumbs {
+		flex: 0 1 40%;
+	}
+
+	.workspace-switcher {
+		flex: 1 1 0;
+		margin-left: 0;
+	}
+
+	.workspace-switcher>span {
+		display: none;
+	}
+
 	.workspace-switcher select {
 		flex: 1;
 		width: auto;
@@ -311,8 +330,4 @@ a[aria-disabled="true"] {
 	.browse-grid {
 		gap: 12px;
 	}
-}
-
-.page-heading h1[tabindex="-1"]:focus {
-	outline: none;
 }

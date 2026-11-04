@@ -78,11 +78,12 @@ export default function WorkspaceBar({
 
 			{!onUniversePage && availableUniverses.length > 1 && (
 				<label className="workspace-switcher">
-					<span>Universe</span>
+					<span>Timeline</span>
 
 					<select
 						value={selectedUniverseId ?? ""}
 						disabled={loading || savingWorkspace}
+						aria-label="Timeline"
 						onChange={(event) => {
 							navigate(workspacePath(
 								canEdit,

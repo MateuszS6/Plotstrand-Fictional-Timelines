@@ -27,11 +27,13 @@ export default function TimelineGuide() {
 				<button
 					type="button"
 					className="utility-button timeline-guide-button"
+					aria-label="Timeline guide"
 					aria-haspopup="dialog"
 					aria-expanded={open}
 					onClick={() => setOpen((current) => !current)}
 				>
-					<span aria-hidden="true">?</span> Timeline guide
+					<span className="timeline-guide-icon" aria-hidden="true">?</span>
+					<span className="timeline-guide-label">Help</span>
 				</button>
 			</div>
 
@@ -57,7 +59,7 @@ export default function TimelineGuide() {
 
 						<p className="legend-copy">
 							{canEdit
-								? "Mouse: click a cell to add/remove an appearance; right-click for types and events."
+								? " Touch: tap a cell to edit. Mouse: click a cell to add/remove; right-click to edit. Keyboard: focus a cell, then press Enter or Space."
 								: "Select an entry for details, or a character name for their history."}
 						</p>
 

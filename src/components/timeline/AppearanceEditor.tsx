@@ -82,7 +82,7 @@ export default function AppearanceEditor({
 			preventScroll: true
 		});
 
-		function handleMouseDown(event: MouseEvent) {
+		function handlePointerDown(event: PointerEvent) {
 			const target = event.target;
 
 			if (!(target instanceof Node)) return;
@@ -101,11 +101,11 @@ export default function AppearanceEditor({
 			}
 		}
 
-		document.addEventListener("mousedown", handleMouseDown);
+		document.addEventListener("pointerdown", handlePointerDown);
 		document.addEventListener("keydown", handleKeyDown);
 
 		return () => {
-			document.removeEventListener("mousedown", handleMouseDown);
+			document.removeEventListener("pointerdown", handlePointerDown);
 			document.removeEventListener("keydown", handleKeyDown);
 
 			if (

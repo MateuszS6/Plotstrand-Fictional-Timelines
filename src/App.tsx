@@ -183,7 +183,15 @@ export default function App({
 							{title}
 						</h1>
 
-						<p>{description}</p>
+						<p
+							className={
+								isTimeline && !selectedUniverse?.code
+									? "timeline-description-generic"
+									: undefined
+							}
+						>
+							{description}
+						</p>
 
 						{isTimeline && selectedUniverse && (
 							<TimelineStatus status={selectedUniverse.content_status} />

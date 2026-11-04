@@ -87,3 +87,29 @@
 	min-height: 0;
 	height: auto;
 }
+
+@media (max-width: 700px) {
+	.studio-session-bar {
+		gap: 8px;
+		padding: 6px 12px;
+	}
+
+	.session-brand {
+		gap: 6px;
+		font-size: 14px;
+	}
+
+	.session-logo {
+		width: 28px;
+		height: 28px;
+	}
+
+	.session-mode,
+	.studio-session-status {
+		display: none;
+	}
+
+	.studio-session-status {
+		gap: 6px;
+	}
+}

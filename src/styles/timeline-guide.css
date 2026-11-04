@@ -5,17 +5,17 @@
 .timeline-tools .timeline-guide-button {
 	min-height: 44px;
 	padding: 8px 12px;
+	border-radius: 15px;
 	border-color: var(--color-link);
 	color: var(--color-link);
 	font-weight: 600;
 }
 
-.timeline-guide-button>span {
+.timeline-guide-icon {
 	display: grid;
 	place-items: center;
 	width: 22px;
 	height: 22px;
-	border: 1px solid currentColor;
 	border-radius: 50%;
 }
 
@@ -106,7 +106,16 @@
 	color: var(--button-text);
 }
 
-@media (max-width: 600px) {
+@media (max-width: 700px) {
+	.timeline-guide-label {
+		display: none;
+	}
+
+	.timeline-tools .timeline-guide-button {
+		width: 44px;
+		padding: 0;
+	}
+
 	.legend-list {
 		grid-template-columns: 1fr;
 	}

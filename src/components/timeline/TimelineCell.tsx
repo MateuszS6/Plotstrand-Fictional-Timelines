@@ -69,32 +69,40 @@ export default function TimelineCell({
 }: TimelineCellProps) {
 	const { canEdit } = useWorkspace();
 	const hasDetails = Boolean(appearance || characterEvent)
+	const interactive = canEdit || hasDetails;
 
 	const [editorOpen, setEditorOpen] = useState(false);
 	const cellRef = useRef<HTMLDivElement>(null);
+	const pointerTypeRef = useRef("");
 
 	const closeEditor = useCallback(() => {
 		setEditorOpen(false);
 	}, []);
 
-	function handleLeftClick() {
+	function handleLeftClick(
+		event: React.MouseEvent<HTMLDivElement>
+	) {
 		if (saving) return;
 
 		if (!canEdit) {
-			if (hasDetails) {
-				setEditorOpen((open) => !open);
-			}
+			if (hasDetails) setEditorOpen((open) => !open);
+			return;
+		}
 
+		if (
+			pointerTypeRef.current === "touch" ||
+			pointerTypeRef.current === "pen" ||
+			event.detail === 0 // Non-pointer activation gives editor
+		) {
+			setEditorOpen(true);
 			return;
 		}
 
 		if (!appearance) {
 			onCreate(characterId, projectId);
-			return;
 		} else {
 			onDelete(characterId, projectId);
 			setEditorOpen(false);
-			return;
 		}
 	}
 
@@ -187,28 +195,30 @@ export default function TimelineCell({
 					? "timeline-cell"
 					: "timeline-cell timeline-cell-viewer"
 			}
-			role={!canEdit && hasDetails ? "button" : undefined}
-			tabIndex={!canEdit && hasDetails ? 0 : undefined}
+			role={interactive ? "button" : undefined}
+			tabIndex={interactive ? 0 : undefined}
 			aria-label={
-				!canEdit && hasDetails
-					? `Details for ${characterName} in ${projectTitle}`
+				interactive
+					? `${canEdit ? "Edit" : "Details for"} ${characterName} in ${projectTitle}`
 					: undefined
 			}
-			aria-haspopup={!canEdit && hasDetails ? "dialog" : undefined}
-			aria-expanded={!canEdit && hasDetails ? editorOpen : undefined}
+			aria-haspopup={interactive ? "dialog" : undefined}
+			aria-expanded={interactive ? editorOpen : undefined}
 			aria-disabled={saving}
+			onPointerDown={(event) => {
+				pointerTypeRef.current = event.pointerType
+			}}
 			onClick={handleLeftClick}
 			onContextMenu={handleRightClick}
 			onKeyDown={(event) => {
 				if (event.target !== event.currentTarget) return;
 
 				if (
-					!canEdit &&
-					hasDetails &&
+					interactive &&
 					(event.key === "Enter" || event.key === " ")
 				) {
 					event.preventDefault();
-					handleLeftClick();
+					if (!saving) setEditorOpen((open) => !open);
 				}
 			}}
 		>
@@ -286,6 +296,19 @@ export default function TimelineCell({
 					anchorRef={cellRef}
 					onClose={closeEditor}
 				>
+					{/* HEADING */}
+
+					<div className="appearance-editor-heading">
+						<strong>{characterName}</strong>
+						<button type="button" onClick={closeEditor}>
+							Close
+						</button>
+					</div>
+
+					<div className="appearance-editor-label">
+						{projectTitle}
+					</div>
+
 					{/* APPEARANCE SECTION */}
 
 					{appearance ? (
@@ -319,6 +342,18 @@ export default function TimelineCell({
 								{appearance.is_detached
 									? "✓ Detached from lifeline"
 									: "Detach from lifeline"}
+							</button>
+
+							<button
+								type="button"
+								disabled={saving}
+								className="appearance-editor-option appearance-editor-danger"
+								onClick={() => {
+									onDelete(characterId, projectId);
+									setEditorOpen(false);
+								}}
+							>
+								Remove appearance
 							</button>
 						</>
 					) : (
