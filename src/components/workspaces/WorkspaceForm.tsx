@@ -1,8 +1,9 @@
 import { useRef, useState, type SubmitEvent } from "react";
-import type { TimelineContentStatus } from "../../types/universe";
+import type { TimelineContentStatus, UniverseType } from "../../types/universe";
 
 export interface WorkspaceFormValues {
 	name: string;
+	universe_type: UniverseType;
 	code: string | null;
 	content_status: TimelineContentStatus;
 	is_published: boolean;
@@ -26,6 +27,7 @@ export default function WorkspaceForm({
 	onCancel
 }: WorkspaceFormProps) {
 	const [name, setName] = useState(initialValues.name);
+	const [universeType, setUniverseType] = useState(initialValues.universe_type);
 	const [code, setCode] = useState(initialValues.code ?? "");
 	const [contentStatus, setContentStatus] = useState(initialValues.content_status);
 	const [isPublished, setIsPublished] = useState(initialValues.is_published);
@@ -52,6 +54,7 @@ export default function WorkspaceForm({
 		try {
 			await onSave({
 				name: trimmedName,
+				universe_type: universeType,
 				code: kind === "universe"
 					? code.trim() || null
 					: null,
@@ -107,6 +110,23 @@ export default function WorkspaceForm({
 							autoFocus
 						/>
 					</label>
+
+					{kind === "universe" && (
+						<label className="form-field">
+							<span>Kind</span>
+							<select
+								value={universeType}
+								onChange={(event) => setUniverseType(
+									event.target.value === "location"
+										? "location"
+										: "universe"
+								)}
+							>
+								<option value="universe">Universe</option>
+								<option value="location">Location / realm</option>
+							</select>
+						</label>
+					)}
 
 					{kind === "universe" && (
 						<label className="form-field">

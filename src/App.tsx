@@ -12,8 +12,8 @@ import UnavailablePage from './pages/UnavailablePage';
 import WorkspacesPage from './pages/WorkspacesPage';
 import type { Character } from './types/character';
 import type { WorkspaceView } from './types/workspace';
-import { workspacePath } from './utils/workspacePath';
 import { formatUniverseCode } from './utils/formatUniverseLabel';
+import { workspacePath } from './utils/workspacePath';
 
 export default function App({
 	activeView
@@ -151,7 +151,8 @@ export default function App({
 					: selectedUniverse?.code
 						? "Character lifelines for " + formatUniverseCode(
 							selectedUniverse.code,
-							selectedFranchise?.name ?? "")
+							selectedFranchise?.name ?? "",
+							selectedUniverse.universe_type)
 						: "Character lifelines showing appearances across projects";
 
 	return (

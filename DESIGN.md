@@ -121,3 +121,10 @@ Apply relevant principles to this app. No specific third-party brand style has b
 - A more prominent Timeline guide button opens a compact guide with three native collapsible sections, all initially closed. Keep real timeline symbols, concise explanations, a fixed heading and scrolling body. Observe popup size changes so expanding sections preserves viewport positioning.
 - Recommend touch tap to open Studio's cell editor; retain mouse shortcuts. Agree this change with the user before implementation. Press-and-hold is an alternative to evaluate, not a requirement. Preserve swiping and Viewer read-only behaviour.
 - A Universe versus Location/realm badge/category is a pending product choice. No new category field is part of the prepared copy/help cleanup.
+
+## Approved touch and location treatment — 3 November 2026
+
+- Preserve the non-wrapping timeline header. Compact mobile chrome should recover timeline space: icon-only accessible guide, reduced repetition, a shorter Viewer action and breadcrumb/selector sharing a row where possible. Keep touch targets usable and navigation available.
+- Touch/pen taps open Studio cell editing; mouse shortcuts remain. Opening a menu or swiping does not write data. Include explicit removal and close controls and keyboard access. Outside dismissal should work with pointer events.
+- Location / realm uses a quiet subtitle above the card name and a lavender leading edge, visually separate from the amber/green coverage pill. Private-only lock is decorative within an explicitly labelled Private timeline indicator; omit Public text on cards. No location code is automatically prefixed Earth-.
+- This proposal is locally verified and supplied in chat for user application; it is not claimed deployed.

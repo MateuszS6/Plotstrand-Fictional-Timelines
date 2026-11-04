@@ -99,7 +99,8 @@ export default function WorkspaceBar({
 								{universe.code
 									? " (" + formatUniverseCode(
 										universe.code,
-										franchise?.name ?? "") + ")"
+										franchise?.name ?? "",
+										universe.universe_type) + ")"
 									: ""}
 							</option>
 						))}

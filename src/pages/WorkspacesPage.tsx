@@ -153,6 +153,7 @@ export default function WorkspacesPage({
 					? "browse-card browse-card-featured"
 					: "browse-card"
 				}
+				data-universe-type={universe?.universe_type}
 			>
 				{featured && (
 					<p className="featured-label">Featured</p>
@@ -179,7 +180,12 @@ export default function WorkspacesPage({
 							if (controlsDisabled) event.preventDefault();
 						}}
 					>
-						<span>{record.name}</span>
+						<span>
+							{universe?.universe_type === "location" && (
+								<small className="browse-kind">Location / realm</small>
+							)}
+							{record.name}
+						</span>
 						<span aria-hidden="true">→</span>
 					</Link>
 				</h2>
@@ -188,7 +194,8 @@ export default function WorkspacesPage({
 					{universe
 						? formatUniverseCode(
 							universe.code,
-							franchise?.name ?? ""
+							franchise?.name ?? "",
+							universe.universe_type
 						) || "Timeline"
 						: "Explore timelines"}
 
@@ -196,12 +203,14 @@ export default function WorkspacesPage({
 						<TimelineStatus status={universe.content_status} />
 					)}
 
-					{canEdit && universe && (
-						<span className="browse-visibility">
-							{!universe.is_published && (
-								<span aria-hidden="true">🔒︎ </span>
-							)}
-							{universe.is_published ? "Public" : "Private"}
+					{canEdit && universe && !universe.is_published && (
+						<span
+							className="browse-visibility"
+							role="img"
+							aria-label="Private timeline"
+							title="Private timeline"
+						>
+							<UtilityIcon name="lock" />
 						</span>
 					)}
 				</p>
@@ -292,6 +301,9 @@ export default function WorkspacesPage({
 					editing={editor.record !== null}
 					initialValues={{
 						name: editor.record?.name ?? "",
+						universe_type: editor.kind === "universe"
+							? editor.record?.universe_type ?? "universe"
+							: "universe",
 						code: editor.kind === "universe"
 							? editor.record?.code ?? null
 							: null,

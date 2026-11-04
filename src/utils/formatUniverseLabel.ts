@@ -1,4 +1,4 @@
-import type { Universe } from "../types/universe";
+import type { Universe, UniverseType } from "../types/universe";
 
 export function formatUniverseLabel(
 	universeId: number,
@@ -15,7 +15,8 @@ export function formatUniverseLabel(
 
 export function formatUniverseCode(
 	code: string | null,
-	franchiseName: string
+	franchiseName: string,
+	universeType: UniverseType
 ): string | null {
 	const value = code?.trim();
 
@@ -25,7 +26,9 @@ export function formatUniverseCode(
 		franchiseName.trim().toLowerCase()
 	);
 
-	return usesEarthCodes && !/^earth[-\s]/i.test(value)
+	return universeType === "universe" &&
+		usesEarthCodes &&
+		!/^earth[-\s]/i.test(value)
 		? "Earth-" + value
 		: value;
 }

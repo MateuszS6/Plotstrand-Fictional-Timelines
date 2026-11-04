@@ -118,11 +118,26 @@
 	background: var(--surface-alt);
 }
 
+.browse-card[data-universe-type="location"] {
+	border-inline-start: 3px solid #9686bb;
+}
+
+.browse-kind {
+	display: block;
+	margin-bottom: 6px;
+	color: #c4b5e3;
+	font-size: 11px;
+	font-weight: 600;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+}
+
 .browse-card h2 {
 	margin: 0;
 	font-size: 22px;
 }
 
+/* The element you tap to open this timeline. */
 .browse-card-open {
 	display: flex;
 	align-items: center;
@@ -180,8 +195,8 @@
 }
 
 .browse-visibility {
-	margin-left: auto;
-	color: var(--color-secondary);
+	display: inline-flex;
+	align-items: center;
 }
 
 .browse-card-actions {
