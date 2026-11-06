@@ -9,6 +9,7 @@ import UtilityIcon from "../components/layout/UtilityIcon";
 
 interface CharactersPageProps {
 	universeId: number;
+	showOrigins: boolean;
 	onEditTimeline: (character: Character) => void;
 }
 
@@ -22,6 +23,7 @@ function sortCharacters(characters: Character[]): Character[] {
 
 export default function CharactersPage({
 	universeId,
+	showOrigins: showOrigin,
 	onEditTimeline
 }: CharactersPageProps) {
 	const { universes } = useWorkspace();
@@ -209,17 +211,17 @@ export default function CharactersPage({
 	return (
 		<section
 			ref={pageRef}
-			className="management-page"
+			className="management-page management-page-compact"
 			aria-label="Characters"
 		>
 			<div className="management-toolbar">
 				<label className="form-field management-search">
-					<span>Search characters</span>
 					<input
 						type="search"
+						aria-label="Search characters"
 						value={search}
 						onChange={(event) => setSearch(event.target.value)}
-						placeholder="Alias, full name or origin"
+						placeholder="Search name or origin"
 					/>
 				</label>
 
@@ -233,11 +235,23 @@ export default function CharactersPage({
 					</button>
 				)}
 
-				<p className="management-summary">
-					{query && `${matchingCharacters.length} of `}
-					{visibleCharacters.length}{" "}
-					{visibleCharacters.length === 1 ? "character" : "characters"}
-				</p>
+				{query && (
+					<p className="management-summary">
+						{matchingCharacters.length}{" of "}
+						{visibleCharacters.length}{" "}
+						{visibleCharacters.length === 1 ? "character" : "characters"}
+					</p>
+				)}
+
+				<label className="management-filter">
+					<input
+						type="checkbox"
+						checked={includeOtherUniverses}
+						disabled={controlsDisabled}
+						onChange={(event) => setIncludeOtherUniverses(event.target.checked)}
+					/>
+					{" Include other origins"}
+				</label>
 
 				<button
 					type="button"
@@ -272,16 +286,6 @@ export default function CharactersPage({
 				/>
 			)}
 
-			<label className="management-summary">
-				<input
-					type="checkbox"
-					checked={includeOtherUniverses}
-					disabled={controlsDisabled}
-					onChange={(event) => setIncludeOtherUniverses(event.target.checked)}
-				/>
-				{" Include other characters in this franchise."}
-			</label>
-
 			{matchingCharacters.length === 0 ? (
 				<p className="status-message">
 					{query
@@ -295,8 +299,9 @@ export default function CharactersPage({
 						<thead>
 							<tr>
 								<th scope="col">Character</th>
-								<th scope="col">Real name</th>
-								<th scope="col">Origin</th>
+								{showOrigin && (
+									<th scope="col">Origin</th>
+								)}
 								<th scope="col">Timeline</th>
 								<th scope="col">Actions</th>
 							</tr>
@@ -305,15 +310,35 @@ export default function CharactersPage({
 						<tbody>
 							{matchingCharacters.map((character) => {
 								const isParticipating = timelineCharacterIds.includes(character.id);
+								const isVisitor = character.origin_universe_id !== universeId;
 								const isChanging = changingCharacterId === character.id;
 
 								return (
-									<tr key={character.id}>
-										<td>{character.alias}</td>
-										<td>{character.real_name ?? "?"}</td>
-										<td>
-											{formatUniverseLabel(character.origin_universe_id, universes)}
+									<tr
+										key={character.id}
+										data-other-origin={isVisitor}
+										data-participating={isParticipating}
+									>
+										<td className="management-name">
+											<strong>{character.alias}</strong>
+
+											{character.real_name && (
+												<small>{character.real_name}</small>
+											)}
 										</td>
+
+										{showOrigin && (
+											<td>
+												{formatUniverseLabel(character.origin_universe_id, universes)}
+
+												{isVisitor && (
+													<small className="management-origin-note">
+														Other origin
+													</small>
+												)}
+											</td>
+										)}
+
 										<td>{isParticipating ? "On timeline" : "No entries"}</td>
 
 										<td>
@@ -322,20 +347,20 @@ export default function CharactersPage({
 													type="button"
 													className="utility-button"
 													disabled={controlsDisabled}
-													aria-label={`Edit details for ${character.alias}`}
+													aria-label={`Details for ${character.alias}`}
 													onClick={() => openEditor(character)}
 												>
-													<UtilityIcon name="edit" /> Edit
+													<UtilityIcon name="edit" /> Details
 												</button>
 
 												<button
 													type="button"
 													className="utility-button"
 													disabled={controlsDisabled}
-													aria-label={`Edit ${character.alias} on this timeline`}
+													aria-label={`Timeline entries for ${character.alias}`}
 													onClick={() => onEditTimeline(character)}
 												>
-													<UtilityIcon name="timeline" /> Edit on timeline
+													<UtilityIcon name="timeline" /> Timeline
 												</button>
 
 												<button

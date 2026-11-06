@@ -182,10 +182,113 @@
 	margin-top: 16px;
 }
 
+/* Compact for character/project management pages */
+
+.management-page-compact {
+	gap: 8px;
+}
+
+.management-page-compact .management-toolbar {
+	gap: 8px;
+	padding: 4px 0;
+	border-bottom: 0;
+	justify-content: flex-start;
+}
+
+.management-page-compact .management-search {
+	flex: 1 1 220px;
+	max-width: none;
+}
+
+.management-page-compact .management-search input {
+	padding: 8px 10px;
+}
+
+.management-page-compact .management-summary {
+	font-size: 12px;
+}
+
+.management-filter {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	font-size: 13px;
+}
+
+.management-page-compact .management-table-container {
+	flex: 1 1 auto;
+	min-height: 160px;
+}
+
+.management-page-compact .management-table th {
+	z-index: 1;
+}
+
+.management-page-compact .management-table th,
+.management-page-compact .management-table td {
+	padding: 9px 12px;
+	vertical-align: middle;
+	font-size: 13px;
+}
+
+.management-page-compact .management-row-actions {
+	flex-wrap: nowrap;
+	gap: 6px;
+}
+
+.management-page-compact .management-row-actions .utility-button {
+	min-height: 32px;
+}
+
+.management-page-compact .management-form {
+	padding: 14px;
+}
+
+.management-page-compact .form-fields {
+	gap: 12px;
+}
+
+.management-page-compact .form-actions {
+	margin-top: 12px;
+}
+
+.management-name {
+	min-width: 160px;
+	max-width: 360px;
+}
+
+.management-name strong {
+	font-weight: 600;
+}
+
+.management-name small,
+.management-origin-note {
+	display: block;
+	margin-top: 3px;
+	color: var(--color-secondary);
+	font-size: 12px;
+}
+
+.management-table tr[data-other-origin="true"] {
+	background: rgba(156, 202, 255, 0.04);
+}
+
+.management-table tr[data-other-origin="true"][data-participating="true"] td:first-child {
+	border-inline-start: 2px solid var(--color-link);
+}
+
+.management-table tr[data-other-origin="true"][data-participating="true"] .management-origin-note {
+	color: var(--color-link);
+}
+
 @media (max-width: 700px) {
 	.management-search {
 		flex-basis: 100%;
 		max-width: none;
+	}
+
+	.management-page-compact .management-search {
+		flex-basis: 100%;
 	}
 
 	.form-fields {
@@ -194,5 +297,14 @@
 
 	.management-form {
 		padding: 16px;
+	}
+}
+
+@media (any-pointer: coarse) {
+
+	.management-page-compact .utility-button,
+	.management-page-compact .management-search input,
+	.management-filter {
+		min-height: 44px;
 	}
 }

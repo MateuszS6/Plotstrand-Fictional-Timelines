@@ -60,6 +60,10 @@ export default function App({
 
 	const isTimeline = activeView === "timeline";
 
+	const hasOtherTimelines = availableUniverses.some(
+		(universe) => universe.id !== selectedUniverseId
+	);
+
 	const isBrowsing =
 		activeView === "franchises" ||
 		activeView === "universes";
@@ -124,6 +128,10 @@ export default function App({
 		);
 	}
 
+	const isManagement =
+		activeView === "characters" ||
+		activeView === "projects";
+
 	const universeName = selectedUniverse?.name ?? "Timeline";
 
 	const title = activeView === "franchises"
@@ -169,13 +177,15 @@ export default function App({
 			<main
 				className={
 					"main-content" +
-					(isTimeline ? " main-content-timeline" : "")
+					(isTimeline ? " main-content-timeline" : "") +
+					(isManagement ? " main-content-management" : "")
 				}
 			>
 				<header
 					className={
 						"page-header" +
-						(isTimeline ? " timeline-page-header" : "")
+						(isTimeline ? " timeline-page-header" : "") +
+						(isManagement ? " management-page-header" : "")
 					}
 				>
 					<div className='page-heading'>
@@ -190,7 +200,7 @@ export default function App({
 									: undefined
 							}
 						>
-							{description}
+							{isManagement ? universeName : description}
 						</p>
 
 						{isTimeline && selectedUniverse && (
@@ -242,6 +252,7 @@ export default function App({
 					<CharactersPage
 						key={selectedUniverseId}
 						universeId={selectedUniverseId}
+						showOrigins={hasOtherTimelines}
 						onEditTimeline={(character) =>
 							openCharacterTimeline(selectedUniverseId, character)
 						}
@@ -250,6 +261,7 @@ export default function App({
 					<ProjectsPage
 						key={selectedUniverseId}
 						universeId={selectedUniverseId}
+						showPrimaryUniverses={hasOtherTimelines}
 					/>
 				) : null}
 			</main>

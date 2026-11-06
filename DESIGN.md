@@ -135,3 +135,10 @@ Apply relevant principles to this app. No specific third-party brand style has b
 - New backlog: more recognisable appearance icons, including the suggested television/aerial silhouette for footage. Judge at actual marker size; adding details can reduce legibility. Keep cells and guide on the same symbol renderer and retain text descriptions.
 - Prepared shared CloseButton using the existing SVG utility icon system: visible X, accessible Close name, native button, 32px desktop/44px touch target, preserved character-panel ref/focus. Keep Cancel and destructive action labels explicit.
 - Consolidate utility button and icon CSS in buttons.css. Keep specialised menu-option styling in timeline.css. This is a small styling/component reuse, not a new button framework. Source is supplied in chat and remains user-applied.
+## Compact management and popup proposal — 6 November 2026
+
+- Characters/Projects use a compact scoped management layout. Keep native table horizontal scrolling on small screens. Show names without forcing narrow letter-by-letter wrapping; secondary full names belong under aliases. Reserve persistent text for useful actions/scope, showing counts when searching.
+- Other origin is a data distinction, not a temporary checkbox state: subtle tint/leading edge plus text. Keep participating visitors distinguishable in the default view too.
+- Existing-project linking belongs behind an Add existing toolbar toggle. Preserve its explanatory append/empty-cells copy, failure recovery and availability while scrolling.
+- Viewer and Studio cell popups share a fixed character/project/close heading, scrollable body, edge-to-edge section rules and explicit Appearance/Event headings. Two-column choice buttons reduce vertical length without reducing touch targets; selected buttons expose aria-pressed. No modal/dialog system replacement or long-press gesture.
+- Record upcoming metadata design: media types, useful release dates and subtle owner-chosen major-project emphasis. Resolve scope and semantics before storage or timeline-header changes.

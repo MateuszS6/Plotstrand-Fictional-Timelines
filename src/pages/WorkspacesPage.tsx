@@ -197,7 +197,9 @@ export default function WorkspacesPage({
 							franchise?.name ?? "",
 							universe.universe_type
 						) || "Timeline"
-						: "Explore timelines"}
+						: !canEdit
+							? "Explore timelines"
+							: ""}
 
 					{universe && (
 						<TimelineStatus status={universe.content_status} />

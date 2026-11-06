@@ -8,10 +8,12 @@ import { formatUniverseLabel } from "../utils/formatUniverseLabel";
 
 interface ProjectsPageProps {
 	universeId: number;
+	showPrimaryUniverses: boolean;
 }
 
 export default function ProjectsPage({
-	universeId
+	universeId,
+	showPrimaryUniverses: showOrigin
 }: ProjectsPageProps) {
 	const { universes } = useWorkspace();
 
@@ -25,11 +27,14 @@ export default function ProjectsPage({
 	const [editor, setEditor] = useState<Project | "new" | null>(null);
 	const pageRef = useRef<HTMLElement>(null);
 
+	const [libraryOpen, setLibraryOpen] = useState(false);
+	const libraryButtonRef = useRef<HTMLButtonElement>(null);
+
 	useEffect(() => {
-		if (editor !== null) {
+		if (editor !== null || libraryOpen) {
 			pageRef.current?.scrollTo({ top: 0 });
 		}
-	}, [editor]);
+	}, [editor, libraryOpen]);
 
 	const [notice, setNotice] = useState<string | null>(null);
 	const [actionError, setActionError] = useState<string | null>(null);
@@ -105,6 +110,7 @@ export default function ProjectsPage({
 	function openEditor(value: Project | "new") {
 		setNotice(null);
 		setActionError(null);
+		setLibraryOpen(false);
 		setEditor(value);
 	}
 
@@ -280,17 +286,17 @@ export default function ProjectsPage({
 	return (
 		<section
 			ref={pageRef}
-			className="management-page"
+			className="management-page management-page-compact"
 			aria-label="Projects"
 		>
 			<div className="management-toolbar">
 				<label className="form-field management-search">
-					<span>Search projects</span>
 					<input
 						type="search"
+						aria-label="Search projects"
 						value={search}
 						onChange={(event) => setSearch(event.target.value)}
-						placeholder="Project title"
+						placeholder="Search projects"
 					/>
 				</label>
 
@@ -304,12 +310,25 @@ export default function ProjectsPage({
 					</button>
 				)}
 
-				<p className="management-summary">
-					{query && `${matchingProjects.length} of `}
-					{projects.length}{" "}
-					{projects.length === 1 ? "project" : "projects"}
-					{!query && " · In chronological order"}
-				</p>
+				{query && (
+					<p className="management-summary">
+						{matchingProjects.length}{" of "}
+						{projects.length}{" "}
+						{projects.length === 1 ? "project" : "projects"}
+					</p>
+				)}
+
+				<button
+					ref={libraryButtonRef}
+					type="button"
+					className="utility-button"
+					disabled={controlsDisabled}
+					aria-expanded={libraryOpen}
+					aria-controls="existing-project-form"
+					onClick={() => setLibraryOpen((open) => !open)}
+				>
+					<UtilityIcon name="add" /> Add existing
+				</button>
 
 				<button
 					type="button"
@@ -317,7 +336,7 @@ export default function ProjectsPage({
 					disabled={controlsDisabled}
 					onClick={() => openEditor("new")}
 				>
-					<UtilityIcon name="add" /> Add project
+					<UtilityIcon name="add" /> New project
 				</button>
 			</div>
 
@@ -345,57 +364,74 @@ export default function ProjectsPage({
 				/>
 			)}
 
-			<form
-				className="management-form"
-				aria-label="Add existing project"
-				onSubmit={(event) => {
-					event.preventDefault();
-					void handleLinkProject();
-				}}
-			>
-				<fieldset disabled={controlsDisabled}>
-					<label className="form-field">
-						<span>Add an existing project to this timeline</span>
+			{libraryOpen && (
+				<form
+					id="existing-project-form"
+					className="management-form"
+					aria-label="Add existing project"
+					onSubmit={(event) => {
+						event.preventDefault();
+						void handleLinkProject();
+					}}
+				>
+					<fieldset disabled={controlsDisabled}>
+						<label className="form-field">
+							<span>Project from this franchise</span>
 
-						<select
-							value={existingProjectId}
-							onChange={(event) => setExistingProjectId(event.target.value)}
-							disabled={availableProjects.length === 0}
-							required
-						>
-							<option value="" disabled>
-								{availableProjects.length === 0
-									? "No other projects in this franchise"
-									: "Choose a project"}
-							</option>
-
-							{availableProjects.map((project) => (
-								<option key={project.id} value={project.id}>
-									{project.title}{" — "}
-									{formatUniverseLabel(
-										project.primary_universe_id,
-										universes
-									)}
+							<select
+								value={existingProjectId}
+								onChange={(event) => setExistingProjectId(event.target.value)}
+								disabled={availableProjects.length === 0}
+								autoFocus
+								required
+							>
+								<option value="" disabled>
+									{availableProjects.length === 0
+										? "No other projects in this franchise"
+										: "Choose a project"}
 								</option>
-							))}
-						</select>
 
-						<small>
-							Adds it at the end with empty cells. Use Edit to change its timeline position.
-						</small>
-					</label>
+								{availableProjects.map((project) => (
+									<option key={project.id} value={project.id}>
+										{project.title}{" — "}
+										{formatUniverseLabel(
+											project.primary_universe_id,
+											universes
+										)}
+									</option>
+								))}
+							</select>
 
-					<div className="form-actions">
-						<button
-							type="submit"
-							className="utility-button"
-							disabled={!existingProjectId}
-						>
-							{linking ? "Adding..." : "Add to timeline"}
-						</button>
-					</div>
-				</fieldset>
-			</form>
+							<small>
+								Adds it at the end with empty cells. Use Edit to change its timeline position.
+							</small>
+						</label>
+
+						<div className="form-actions">
+							<button
+								type="submit"
+								className="utility-button"
+								disabled={!existingProjectId}
+							>
+								{linking ? "Adding..." : "Add to timeline"}
+							</button>
+
+							<button
+								type="button"
+								className="utility-button"
+								onClick={() => {
+									setLibraryOpen(false);
+									libraryButtonRef.current?.focus({
+										preventScroll: true
+									});
+								}}
+							>
+								Close
+							</button>
+						</div>
+					</fieldset>
+				</form>
+			)}
 
 			{matchingProjects.length === 0 ? (
 				<p className="status-message">
@@ -412,7 +448,9 @@ export default function ProjectsPage({
 								<th scope="col">Order</th>
 								<th scope="col">Project</th>
 								<th scope="col">Release date</th>
-								<th scope="col">Primary universe</th>
+								{showOrigin && (
+									<th scope="col">Primary universe</th>
+								)}
 								<th scope="col">Actions</th>
 							</tr>
 						</thead>
@@ -421,11 +459,18 @@ export default function ProjectsPage({
 							{matchingProjects.map(({ project, position }) => (
 								<tr key={project.id}>
 									<td>{position}</td>
-									<td>{project.title}</td>
-									<td>{project.release_date ?? "Not set"}</td>
-									<td>
-										{formatUniverseLabel(project.primary_universe_id, universes)}
+
+									<td className="management-name">
+										<strong>{project.title}</strong>
 									</td>
+
+									<td>{project.release_date ?? "Not set"}</td>
+
+									{showOrigin && (
+										<td>
+											{formatUniverseLabel(project.primary_universe_id, universes)}
+										</td>
+									)}
 
 									<td>
 										<div className="management-row-actions">
