@@ -11,7 +11,7 @@
 	background: var(--surface-alt);
 }
 
-/* Path */
+/* Path breadcrumbs */
 
 .workspace-breadcrumbs {
 	display: flex;
@@ -274,8 +274,7 @@
 
 .workspace-link,
 .workspace-tab,
-.browse-card-open,
-.utility-button {
+.browse-card-open {
 	text-decoration: none;
 }
 
@@ -308,11 +307,11 @@ a[aria-disabled="true"] {
 	}
 
 	.workspace-breadcrumbs {
-		flex: 0 1 40%;
+		flex: 0 0 auto;
 	}
 
 	.workspace-switcher {
-		flex: 1 1 0;
+		flex: 1 1 200px;
 		margin-left: 0;
 	}
 

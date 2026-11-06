@@ -128,3 +128,10 @@ Apply relevant principles to this app. No specific third-party brand style has b
 - Touch/pen taps open Studio cell editing; mouse shortcuts remain. Opening a menu or swiping does not write data. Include explicit removal and close controls and keyboard access. Outside dismissal should work with pointer events.
 - Location / realm uses a quiet subtitle above the card name and a lavender leading edge, visually separate from the amber/green coverage pill. Private-only lock is decorative within an explicitly labelled Private timeline indicator; omit Public text on cards. No location code is automatically prefixed Earth-.
 - This proposal is locally verified and supplied in chat for user application; it is not claimed deployed.
+
+## Applied mobile/location review and icon follow-up — 6 November 2026
+
+- Touch editing and location cards are applied and locally verified. Retain the user's compact mobile bars and non-wrapping timeline controls. Only private Studio cards show a labelled lock.
+- New backlog: more recognisable appearance icons, including the suggested television/aerial silhouette for footage. Judge at actual marker size; adding details can reduce legibility. Keep cells and guide on the same symbol renderer and retain text descriptions.
+- Prepared shared CloseButton using the existing SVG utility icon system: visible X, accessible Close name, native button, 32px desktop/44px touch target, preserved character-panel ref/focus. Keep Cancel and destructive action labels explicit.
+- Consolidate utility button and icon CSS in buttons.css. Keep specialised menu-option styling in timeline.css. This is a small styling/component reuse, not a new button framework. Source is supplied in chat and remains user-applied.

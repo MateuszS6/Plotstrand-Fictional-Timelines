@@ -1,0 +1,54 @@
+.utility-button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 6px;
+	padding: 6px 10px;
+
+	border: 1px solid var(--border-primary);
+	border-radius: var(--radius-sm);
+
+	background: var(--surface-overlay);
+	color: var(--color-primary);
+
+	white-space: nowrap;
+	text-decoration: none;
+	cursor: pointer;
+}
+
+.utility-button:hover:not(:disabled) {
+	background: var(--button-bg-active);
+}
+
+.utility-button-danger {
+	color: var(--color-danger);
+}
+
+.utility-button:disabled {
+	opacity: 0.55;
+	cursor: default;
+}
+
+.utility-icon {
+	width: 16px;
+	height: 16px;
+	flex-shrink: 0;
+}
+
+.close-button,
+.appearance-editor .close-button {
+	flex: 0 0 32px;
+	width: 32px;
+	height: 32px;
+	padding: 0;
+	text-align: center;
+}
+
+@media (any-pointer: coarse) {
+	.close-button,
+	.appearance-editor .close-button {
+		flex-basis: 44px;
+		width: 44px;
+		height: 44px;
+	}
+}

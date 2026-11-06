@@ -4,6 +4,7 @@ import { APPEARANCE_OPTIONS, type Appearance, type AppearanceType, type Appearan
 import { CHARACTER_EVENT_OPTIONS, type CharacterEvent, type CharacterEventPosition, type CharacterEventType } from "../../types/characterEvent";
 import AppearanceEditor from "./AppearanceEditor";
 import TimelineMarkers from "./TimelineMarkers";
+import CloseButton from "../layout/CloseButton";
 
 interface TimelineCellProps {
 	characterId: number;
@@ -282,9 +283,7 @@ export default function TimelineCell({
 							</p>
 						)}
 
-						<button type="button" onClick={closeEditor}>
-							Close
-						</button>
+						<CloseButton onClick={closeEditor} />
 					</div>
 				</AppearanceEditor>
 			)}
@@ -300,9 +299,7 @@ export default function TimelineCell({
 
 					<div className="appearance-editor-heading">
 						<strong>{characterName}</strong>
-						<button type="button" onClick={closeEditor}>
-							Close
-						</button>
+						<CloseButton onClick={closeEditor} />
 					</div>
 
 					<div className="appearance-editor-label">

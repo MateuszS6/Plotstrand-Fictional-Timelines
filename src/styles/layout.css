@@ -84,24 +84,6 @@
 	color: var(--color-danger);
 }
 
-.utility-button {
-	padding: 6px 10px;
-
-	border: 1px solid var(--border-primary);
-	border-radius: var(--radius-sm);
-
-	white-space: nowrap;
-
-	background: var(--surface-overlay);
-	color: var(--color-primary);
-
-	cursor: pointer;
-}
-
-.utility-button:hover {
-	background: var(--button-bg-active);
-}
-
 @media (max-width: 700px) {
 	.app-layout {
 		flex-direction: column;

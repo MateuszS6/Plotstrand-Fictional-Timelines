@@ -5,6 +5,7 @@ import type { Character } from "../../types/character";
 import { CHARACTER_EVENT_OPTIONS, type CharacterEvent } from "../../types/characterEvent";
 import type { Project } from "../../types/project";
 import EventIcon from "./EventIcon";
+import CloseButton from "../layout/CloseButton";
 
 interface CharacterPanelProps {
 	character: Character;
@@ -121,14 +122,7 @@ export default function CharacterPanel({
 					{character.alias}
 				</h2>
 
-				<button
-					ref={closeRef}
-					type="button"
-					className="utility-button"
-					onClick={closePanel}
-				>
-					Close
-				</button>
+				<CloseButton ref={closeRef} onClick={closePanel} />
 			</header>
 
 			<div ref={bodyRef} className="character-panel-body">

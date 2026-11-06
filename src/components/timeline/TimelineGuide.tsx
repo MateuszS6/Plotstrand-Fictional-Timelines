@@ -4,6 +4,7 @@ import { APPEARANCE_OPTIONS, type AppearanceType } from "../../types/appearance"
 import { CHARACTER_EVENT_OPTIONS } from "../../types/characterEvent";
 import AppearanceEditor from "./AppearanceEditor";
 import TimelineMarkers from "./TimelineMarkers";
+import CloseButton from "../layout/CloseButton";
 
 const descriptions: Record<AppearanceType, string> = {
 	standard: "An ordinary appearance in the project.",
@@ -46,9 +47,7 @@ export default function TimelineGuide() {
 				>
 					<div className="legend-heading">
 						<h2>Timeline guide</h2>
-						<button type="button" onClick={close}>
-							Close
-						</button>
+						<CloseButton onClick={close} />
 					</div>
 
 					<div className="legend-body">

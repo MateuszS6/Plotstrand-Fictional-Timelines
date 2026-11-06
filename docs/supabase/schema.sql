@@ -3,6 +3,8 @@
 -- Targeted update 1 November 2026: verified universes.content_status, its
 -- non-null in_progress default and universes_content_status_check. Other
 -- schema objects retain the snapshot/review dates documented below.
+-- Targeted update 6 November 2026: verified universes.universe_type, its
+-- non-null universe default and universe/location check. Other objects unchanged.
 -- Documentation only: this is not a migration or a complete pg_dump backup.
 -- Includes public application tables, column defaults/identity modes, named
 -- constraints (and their indexes), RLS policies, and table/sequence privileges.
@@ -32,6 +34,8 @@ CREATE TABLE public.universes (
     code text,
     is_published boolean DEFAULT false NOT NULL,
     content_status text DEFAULT 'in_progress'::text NOT NULL,
+    universe_type text DEFAULT 'universe'::text NOT NULL,
+    CONSTRAINT universes_universe_type_check CHECK (universe_type = ANY (ARRAY['universe'::text, 'location'::text])),
     CONSTRAINT universes_content_status_check CHECK (content_status = ANY (ARRAY['in_progress'::text, 'up_to_date'::text])),
     CONSTRAINT universes_franchise_id_fkey FOREIGN KEY (franchise_id) REFERENCES public.franchises(id),
     CONSTRAINT universes_franchise_id_name_key UNIQUE (franchise_id, name),
