@@ -19,7 +19,7 @@
 	border-radius: 50%;
 }
 
-.appearance-editor.timeline-legend-popup {
+.anchored-popup.timeline-legend-popup {
 	width: 640px;
 	max-height: min(560px, calc(100dvh - 24px));
 	padding: 0px;

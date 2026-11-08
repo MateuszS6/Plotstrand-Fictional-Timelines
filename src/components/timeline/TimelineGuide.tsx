@@ -2,9 +2,9 @@ import { useCallback, useRef, useState } from "react";
 import { useWorkspace } from "../../context/WorkspaceContext";
 import { APPEARANCE_OPTIONS, type AppearanceType } from "../../types/appearance";
 import { CHARACTER_EVENT_OPTIONS } from "../../types/characterEvent";
-import AppearanceEditor from "./AppearanceEditor";
-import TimelineMarkers from "./TimelineMarkers";
 import CloseButton from "../layout/CloseButton";
+import AnchoredPopup from "./AnchoredPopup";
+import TimelineMarkers from "./TimelineMarkers";
 
 const descriptions: Record<AppearanceType, string> = {
 	standard: "An ordinary appearance in the project.",
@@ -39,7 +39,7 @@ export default function TimelineGuide() {
 			</div>
 
 			{open && (
-				<AppearanceEditor
+				<AnchoredPopup
 					anchorRef={anchorRef}
 					onClose={close}
 					label="Timeline guide"
@@ -193,7 +193,7 @@ export default function TimelineGuide() {
 							{!canEdit && " Use Tab, then Enter or Space, to open entry details."}
 						</p>
 					</div>
-				</AppearanceEditor>
+				</AnchoredPopup>
 			)}
 		</div>
 	);

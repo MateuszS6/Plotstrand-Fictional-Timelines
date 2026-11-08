@@ -2,9 +2,9 @@ import { useCallback, useRef, useState } from "react";
 import { useWorkspace } from "../../context/WorkspaceContext";
 import { APPEARANCE_OPTIONS, type Appearance, type AppearanceType, type AppearanceUpdate } from "../../types/appearance";
 import { CHARACTER_EVENT_OPTIONS, type CharacterEvent, type CharacterEventPosition, type CharacterEventType } from "../../types/characterEvent";
-import AppearanceEditor from "./AppearanceEditor";
-import TimelineMarkers from "./TimelineMarkers";
 import CloseButton from "../layout/CloseButton";
+import AnchoredPopup from "./AnchoredPopup";
+import TimelineMarkers from "./TimelineMarkers";
 
 interface TimelineCellProps {
 	characterId: number;
@@ -137,22 +137,6 @@ export default function TimelineCell({
 		setEditorOpen(false);
 	}
 
-	function handleDetachedToggle(
-		event: React.MouseEvent
-	) {
-		event.stopPropagation();
-
-		if (!appearance) return;
-
-		onUpdate(
-			characterId,
-			projectId,
-			{
-				is_detached: !appearance.is_detached
-			}
-		);
-	}
-
 	function handleEventTypeChange(
 		type: CharacterEventType
 	) {
@@ -241,205 +225,197 @@ export default function TimelineCell({
 				isFirstConnected={isFirstConnected}
 			/>
 
-			{/* VIEWER */}
+			{/* VIEWER | EDITOR */}
 
-			{editorOpen && !canEdit && hasDetails && (
-				<AppearanceEditor
+			{editorOpen && interactive && (
+				<AnchoredPopup
 					anchorRef={cellRef}
 					onClose={closeEditor}
-				>
-					<div className="timeline-cell-details">
-						<strong>{characterName}</strong>
-						<p>
-							<span aria-hidden="true">🎬</span>{" "}
-							{projectTitle}
-						</p>
-
-						{appearance && (
-							<p>
-								Appearance: {APPEARANCE_OPTIONS.find((option) =>
-									option.value === appearance.appearance_type
-								)?.label}
-
-								<br />
-
-								{appearance.is_detached
-									? "Detached from the lifeline"
-									: "Connected to the lifeline"}
-							</p>
-						)}
-
-						{characterEvent && (
-							<p>
-								Event: {CHARACTER_EVENT_OPTIONS.find((option) =>
-									option.value === characterEvent.event_type
-								)?.label}
-
-								<br />
-
-								{characterEvent.event_position === "after"
-									? "After this project"
-									: "At this project"}
-							</p>
-						)}
-
-						<CloseButton onClick={closeEditor} />
-					</div>
-				</AppearanceEditor>
-			)}
-
-			{/* EDITOR */}
-
-			{editorOpen && canEdit && (
-				<AppearanceEditor
-					anchorRef={cellRef}
-					onClose={closeEditor}
+					className="cell-popup"
+					label={`${canEdit ? "Edit " : ""}${characterName} — ${projectTitle}`}
 				>
 					{/* HEADING */}
 
-					<div className="appearance-editor-heading">
-						<strong>{characterName}</strong>
+					<div className="cell-popup-heading">
+						<div className="cell-popup-heading-text">
+							<strong>{characterName}</strong>
+
+							<p className="cell-project">
+								<span>Project</span>
+								{projectTitle}
+							</p>
+						</div>
+
 						<CloseButton onClick={closeEditor} />
 					</div>
 
-					<div className="appearance-editor-label">
-						{projectTitle}
+					{/* BODY */}
+
+					<div className="cell-popup-body">
+						{/* APPEARANCE SECTION */}
+
+						{(canEdit || appearance) && (
+							<section className="cell-popup-section" aria-label="Appearance">
+								<h3>Appearance</h3>
+
+								{canEdit ? (
+									// STUDIO
+									appearance ? (
+										<>
+											<div className="cell-choices">
+												{APPEARANCE_OPTIONS.map(option => (
+													<button
+														key={option.value}
+														type="button"
+														disabled={saving}
+														aria-pressed={appearance.appearance_type === option.value}
+														className={
+															"cell-choice" +
+															(appearance.appearance_type === option.value ? " active" : "")
+														}
+														onClick={() => handleAppearanceTypeChange(option.value)}
+													>
+														{option.label}
+													</button>
+												))}
+											</div>
+
+											<div className="cell-control-group">
+												<label className="cell-detach-control">
+													<input
+														type="checkbox"
+														checked={appearance.is_detached}
+														disabled={saving}
+														onChange={event =>
+															onUpdate(characterId, projectId, {
+																is_detached: event.target.checked
+															})
+														}
+													/>
+													Detached from lifeline
+												</label>
+											</div>
+
+											<button
+												type="button"
+												disabled={saving}
+												className="cell-action cell-action-danger"
+												onClick={() => {
+													onDelete(characterId, projectId);
+													setEditorOpen(false);
+												}}
+											>
+												Remove appearance
+											</button>
+										</>
+									) : (
+										<button
+											type="button"
+											disabled={saving}
+											className="cell-action"
+											onClick={() => {
+												onCreate(characterId, projectId);
+												setEditorOpen(false);
+											}}
+										>
+											Add standard appearance
+										</button>
+									)
+								) : (
+									// VIEWER
+									<>
+										<p>
+											{APPEARANCE_OPTIONS.find(
+												option => option.value === appearance?.appearance_type
+											)?.label}
+										</p>
+										<p className="cell-secondary">
+											{appearance?.is_detached
+												? "Detached from the lifeline"
+												: "Connected to the lifeline"}
+										</p>
+									</>
+								)}
+							</section>
+						)}
+
+						{/* EVENT SECTION */}
+
+						{(canEdit || characterEvent) && (
+							<section className="cell-popup-section" aria-label="Event">
+								<h3>Event</h3>
+
+								{canEdit ? (
+									// STUDIO
+									<>
+										<div className="cell-choices">
+											{CHARACTER_EVENT_OPTIONS.map(option => (
+												<button
+													key={option.value}
+													type="button"
+													disabled={saving}
+													aria-pressed={characterEvent?.event_type === option.value}
+													className={
+														"cell-choice" +
+														(characterEvent?.event_type === option.value ? " active" : "")
+													}
+													onClick={() => handleEventTypeChange(option.value)}
+												>
+													{option.label}
+												</button>
+											))}
+										</div>
+
+										{characterEvent && (
+											<>
+												<div className="cell-control-group">
+													<label className="cell-position-control">
+														<span>Position</span>
+
+														<select
+															value={characterEvent.event_position}
+															disabled={saving}
+															onChange={event => handleEventPositionChange(
+																event.target.value === "after" ? "after" : "at"
+															)}
+														>
+															<option value="at">At project</option>
+															<option value="after">After project</option>
+														</select>
+													</label>
+												</div>
+
+												<button
+													type="button"
+													disabled={saving}
+													className="cell-action cell-action-danger"
+													onClick={handleDeleteEvent}
+												>
+													Remove event
+												</button>
+											</>
+										)}
+									</>
+								) : (
+									// VIEWER
+									<>
+										<p>
+											{CHARACTER_EVENT_OPTIONS.find(
+												option => option.value === characterEvent?.event_type
+											)?.label}
+										</p>
+										<p className="cell-secondary">
+											{characterEvent?.event_position === "after"
+												? "After this project"
+												: "At this project"}
+										</p>
+									</>
+								)}
+							</section>
+						)}
 					</div>
-
-					{/* APPEARANCE SECTION */}
-
-					{appearance ? (
-						<>
-							{APPEARANCE_OPTIONS.map((option) => (
-								<button
-									key={option.value}
-									disabled={saving}
-									className={
-										appearance.appearance_type === option.value
-											? "appearance-editor-option active"
-											: "appearance-editor-option"
-									}
-									onClick={() => handleAppearanceTypeChange(option.value)}
-								>
-									{option.label}
-								</button>
-							))}
-
-							<div className="appearance-editor-divider" />
-
-							<button
-								disabled={saving}
-								className={
-									appearance.is_detached
-										? "appearance-editor-option active"
-										: "appearance-editor-option"
-								}
-								onClick={handleDetachedToggle}
-							>
-								{appearance.is_detached
-									? "✓ Detached from lifeline"
-									: "Detach from lifeline"}
-							</button>
-
-							<button
-								type="button"
-								disabled={saving}
-								className="appearance-editor-option appearance-editor-danger"
-								onClick={() => {
-									onDelete(characterId, projectId);
-									setEditorOpen(false);
-								}}
-							>
-								Remove appearance
-							</button>
-						</>
-					) : (
-						<button
-							disabled={saving}
-							className="appearance-editor-option"
-							onClick={() => {
-								onCreate(characterId, projectId);
-								setEditorOpen(false);
-							}}
-						>
-							Add standard appearance
-						</button>
-					)}
-
-					{/* EVENT SECTION */}
-
-					<div className="appearance-editor-divider" />
-
-					<div className="appearance-editor-label">
-						Timeline event
-					</div>
-
-					{CHARACTER_EVENT_OPTIONS.map((option) => (
-						<button
-							key={option.value}
-							disabled={saving}
-							className={
-								characterEvent?.event_type === option.value
-									? "appearance-editor-option active"
-									: "appearance-editor-option"
-							}
-							onClick={() => handleEventTypeChange(option.value)}
-						>
-							{option.label}
-						</button>
-					))}
-
-					{/* EVENT OPTIONS */}
-
-					{characterEvent && (
-						<>
-							<div className="appearance-editor-divider" />
-
-							<div className="appearance-editor-label">
-								Event position
-							</div>
-
-							<button
-								disabled={saving}
-								className={
-									characterEvent.event_position === "at"
-										? "appearance-editor-option active"
-										: "appearance-editor-option"
-								}
-								onClick={() =>
-									handleEventPositionChange("at")
-								}
-							>
-								At project
-							</button>
-
-							<button
-								disabled={saving}
-								className={
-									characterEvent.event_position === "after"
-										? "appearance-editor-option active"
-										: "appearance-editor-option"
-								}
-								onClick={() =>
-									handleEventPositionChange("after")
-								}
-							>
-								After project
-							</button>
-
-							<div className="appearance-editor-divider" />
-
-							<button
-								disabled={saving}
-								className="appearance-editor-option appearance-editor-danger"
-								onClick={handleDeleteEvent}
-							>
-								Remove event
-							</button>
-						</>
-					)}
-				</AppearanceEditor>
+				</AnchoredPopup>
 			)}
-		</div>
+		</div >
 	);
 }

@@ -76,7 +76,7 @@ h3,
 .timeline-container,
 .management-page,
 .management-table-container,
-.appearance-editor,
+.anchored-popup,
 .legend-body {
 	scrollbar-width: thin;
 	scrollbar-color: var(--timeline-dot) transparent;

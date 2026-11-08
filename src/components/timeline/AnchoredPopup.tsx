@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, type ReactNode, type RefObject } from "react";
 import { createPortal } from "react-dom";
 
-interface AppearanceEditorProps {
+interface AnchoredPopupProps {
 	anchorRef: RefObject<HTMLDivElement | null>;
 	onClose: () => void;
 	children: ReactNode;
@@ -9,13 +9,13 @@ interface AppearanceEditorProps {
 	className?: string;
 }
 
-export default function AppearanceEditor({
+export default function AnchoredPopup({
 	anchorRef,
 	onClose,
 	children,
-	label = "Appearance and timeline event",
+	label = "Details",
 	className = ""
-}: AppearanceEditorProps) {
+}: AnchoredPopupProps) {
 	const editorRef = useRef<HTMLDivElement>(null);
 
 	useLayoutEffect(() => {
@@ -120,7 +120,7 @@ export default function AppearanceEditor({
 	return createPortal(
 		<div
 			ref={editorRef}
-			className={`appearance-editor ${className}`}
+			className={`anchored-popup ${className}`}
 			role="dialog"
 			aria-label={label}
 			onClick={(event) => event.stopPropagation()}
