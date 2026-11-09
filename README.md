@@ -7,9 +7,11 @@ Inspired by an Excel workflow, Plotstrand uses character rows,
 chronological project columns and visual lifelines to track appearances
 and events within each universe.
 
-## Current version — `0.7.0`
+## Current version — `0.8.0`
 
-Touch-friendly timeline editing, support for locations and realms, searchable compact management pages, and clearer cell details and controls.
+Robust project drag-and-drop.
+
+**Previous:** touch-friendly timeline editing, support for locations and realms, searchable compact management pages, and clearer cell details and controls.
 
 See the [development plan](docs/development-plan.md).
 
@@ -17,9 +19,11 @@ See the [development plan](docs/development-plan.md).
 
 > ![Locations](docs/images/v0.7.0-multiverse-locations.png)
 
-> ![Timeline Viewer](docs/images/v0.7.0-viewer-popup.png)
+> ![Viewing](docs/images/v0.7.0-viewer-popup.png)
 
-> ![Timeline Studio](docs/images/v0.7.0-studio-popup.png)
+> ![Editing](docs/images/v0.7.0-studio-popup.png)
+
+> ![Ordering](docs/images/v0.8.0-project-drag-n-drop.png)
 
 ## Aim
 

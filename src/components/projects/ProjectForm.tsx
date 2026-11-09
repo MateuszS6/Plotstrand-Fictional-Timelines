@@ -30,7 +30,7 @@ export default function ProjectForm({
 		(item) => item.id !== project?.id
 	);
 
-	const [beforeId, setBeforeId] = useState(() => {
+	const [beforeProjectId, setBeforeProjectId] = useState(() => {
 		if (!project) return "";
 
 		const index = projects.findIndex(
@@ -57,10 +57,10 @@ export default function ProjectForm({
 		if (savingRef.current) return;
 
 		const trimmedTitle = title.trim();
-		const nextPosition = beforeId === ""
+		const nextPosition = beforeProjectId === ""
 			? otherProjects.length + 1
 			: otherProjects.findIndex(
-				(item) => String(item.id) === beforeId
+				(item) => String(item.id) === beforeProjectId
 			) + 1;
 
 		if (!trimmedTitle) {
@@ -187,18 +187,16 @@ export default function ProjectForm({
 						<span>Place in this timeline</span>
 
 						<select
-							value={beforeId}
-							onChange={(event) => setBeforeId(event.target.value)}
+							value={beforeProjectId}
+							onChange={(event) => setBeforeProjectId(event.target.value)}
 						>
-							{otherProjects.map((item) => (
-								<option key={item.id} value={String(item.id)}>
-									Before {item.title}
+							<option value="">At the end</option>
+
+							{projects.map(project => (
+								<option key={project.id} value={project.id}>
+									{"->"} {project.title}
 								</option>
 							))}
-
-							<option value="">
-								{otherProjects.length ? "At the end" : "First project"}
-							</option>
 						</select>
 					</label>
 				</div>

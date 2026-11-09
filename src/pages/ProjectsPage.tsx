@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import UtilityIcon from "../components/layout/UtilityIcon";
 import ProjectForm from "../components/projects/ProjectForm";
+import ProjectOrderTable from "../components/projects/ProjectOrderTable";
 import { useWorkspace } from "../context/WorkspaceContext";
-import { deleteProject, getProjectsForPrimaryUniverses, getProjectsForUniverse, linkProjectToUniverse, saveProjectInUniverse, unlinkProjectToUniverse } from "../services/projects";
+import { deleteProject, getProjectsForPrimaryUniverses, getProjectsForUniverse, placeProjectInUniverse, saveProjectInUniverse, unlinkProjectToUniverse } from "../services/projects";
 import type { Project, ProjectInput } from "../types/project";
 import { formatUniverseLabel } from "../utils/formatUniverseLabel";
 
@@ -41,17 +42,23 @@ export default function ProjectsPage({
 
 	const [libraryProjects, setLibraryProjects] = useState<Project[]>([]);
 	const [existingProjectId, setExistingProjectId] = useState("");
-	const [linking, setLinking] = useState(false);
+	const [beforeProjectId, setBeforeProjectId] = useState("");
+	const [savingPlacement, setSavingPlacement] = useState(false);
+	const [dragging, setDragging] = useState(false);
+	const [needsReload, setNeedsReload] = useState(false);
 	const [removingId, setRemovingId] = useState<number | null>(null);
 
 	const [deletingId, setDeletingId] = useState<number | null>(null);
 	const changingRef = useRef(false);
 
-	const controlsDisabled =
+	const actionsDisabled =
 		editor !== null ||
 		deletingId !== null ||
-		linking ||
+		savingPlacement ||
+		needsReload ||
 		removingId !== null;
+
+	const controlsDisabled = actionsDisabled || dragging;
 
 	const availableProjects = libraryProjects.filter((project) =>
 		!projects.some((linked) => linked.id === project.id)
@@ -84,6 +91,7 @@ export default function ProjectsPage({
 
 				setProjects(data);
 				setLibraryProjects(library);
+				setNeedsReload(false);
 			} catch (error) {
 				if (cancelled) return;
 
@@ -102,6 +110,7 @@ export default function ProjectsPage({
 	}, [universeId, universes, loadAttempt])
 
 	function retry() {
+		setActionError(null);
 		setError(null);
 		setLoading(true);
 		setLoadAttempt((current) => current + 1);
@@ -179,6 +188,9 @@ export default function ProjectsPage({
 			);
 
 			setExistingProjectId("");
+			setBeforeProjectId(current =>
+				current === String(project.id) ? "" : current
+			);
 			setNotice(`${project.title} deleted.`)
 		} catch (caughtError) {
 			console.error(caughtError);
@@ -189,37 +201,132 @@ export default function ProjectsPage({
 		}
 	}
 
-	async function handleLinkProject() {
-		if (changingRef.current || editor !== null) return;
+	async function placeProject(
+		project: Project,
+		beforeId: number | null,
+		add: boolean
+	): Promise<boolean> {
+		if (changingRef.current || editor !== null || needsReload) return false;
 
+		const previous = projects;
+		const others = previous.filter(item => item.id !== project.id);
+
+		const index = beforeId === null
+			? others.length
+			: others.findIndex(item => item.id === beforeId);
+
+		if (index < 0) {
+			setActionError("Choose a placement again; that project is no longer available.");
+			return false;
+		}
+
+		changingRef.current = true;
+		setSavingPlacement(true);
+		setNotice(null);
+		setActionError(null);
+
+		if (!add) {
+			const optimistic = [...others];
+			optimistic.splice(index, 0, project);
+			setProjects(optimistic);
+		}
+
+		try {
+			const saved = await placeProjectInUniverse(
+				universeId,
+				project.id,
+				previous.map(item => item.id),
+				beforeId,
+				add
+			);
+
+			setProjects(saved);
+
+			setNotice(add
+				? project.title + " added to this timeline."
+				: "Project order saved."
+			);
+
+			return true;
+		} catch (caughtError) {
+			console.error(caughtError);
+			setProjects(previous);
+
+			try {
+				// The save may have succeeded even if its response was lost.
+				const [latest, library] = await Promise.all([
+					getProjectsForUniverse(universeId),
+					getProjectsForPrimaryUniverses(
+						universes.map(item => item.id)
+					)
+				]);
+
+				setProjects(latest);
+				setLibraryProjects(library);
+
+				setExistingProjectId(current =>
+					library.some(item => item.id === Number(current)) &&
+						!latest.some(item => item.id === Number(current))
+						? current
+						: ""
+				);
+
+				setBeforeProjectId(current =>
+					latest.some(item => item.id === Number(current))
+						? current
+						: ""
+				);
+
+				setActionError(
+					"The change could not be confirmed. " +
+					"The saved list has been reloaded; " +
+					"check its order before trying again."
+				);
+
+			} catch (reloadError) {
+				console.error(reloadError);
+				setNeedsReload(true);
+
+				setActionError(
+					"The saved order could not be checked. " +
+					"Reload projects before making more changes."
+				);
+			}
+
+			return false;
+		} finally {
+			changingRef.current = false;
+			setSavingPlacement(false);
+		}
+	}
+
+	async function handleMoveProject(
+		projectId: number,
+		beforeId: number | null
+	) {
+		const project = projects.find(item => item.id === projectId);
+
+		if (project && !query && !libraryOpen) {
+			await placeProject(project, beforeId, false);
+		}
+	}
+
+	async function handleLinkProject() {
 		const project = availableProjects.find((item) =>
 			item.id === Number(existingProjectId)
 		);
 
 		if (!project) return;
 
-		changingRef.current = true
-		setLinking(true);
-		setNotice(null);
-		setActionError(null);
+		const saved = await placeProject(
+			project,
+			beforeProjectId === "" ? null : Number(beforeProjectId),
+			true
+		);
 
-		try {
-			const orderedProjects = await linkProjectToUniverse(
-				universeId,
-				project.id
-			);
-
-			setProjects(orderedProjects);
+		if (saved) {
 			setExistingProjectId("");
-			setNotice(`${project.title} added to this timeline.`);
-		} catch (caughtError) {
-			console.error(caughtError);
-			setActionError(
-				"Could not add the project to this timeline. Please try again."
-			);
-		} finally {
-			changingRef.current = false;
-			setLinking(false);
+			setBeforeProjectId("");
 		}
 	}
 
@@ -244,8 +351,12 @@ export default function ProjectsPage({
 		try {
 			await unlinkProjectToUniverse(universeId, project.id);
 
-			setProjects((current) =>
-				current.filter((item) => item.id !== project.id)
+			setProjects(current =>
+				current.filter(item => item.id !== project.id)
+			);
+
+			setBeforeProjectId(current =>
+				current === String(project.id) ? "" : current
 			);
 
 			setNotice(`${project.title} removed from this timeline.`);
@@ -293,6 +404,7 @@ export default function ProjectsPage({
 				<label className="form-field management-search">
 					<input
 						type="search"
+						disabled={savingPlacement || dragging || needsReload}
 						aria-label="Search projects"
 						value={search}
 						onChange={(event) => setSearch(event.target.value)}
@@ -303,6 +415,7 @@ export default function ProjectsPage({
 				{search && (
 					<button
 						type="button"
+						disabled={savingPlacement || dragging || needsReload}
 						className="utility-button"
 						onClick={() => setSearch("")}
 					>
@@ -315,6 +428,7 @@ export default function ProjectsPage({
 						{matchingProjects.length}{" of "}
 						{projects.length}{" "}
 						{projects.length === 1 ? "project" : "projects"}
+						{" · Clear search to drag rows"}
 					</p>
 				)}
 
@@ -339,6 +453,22 @@ export default function ProjectsPage({
 					<UtilityIcon name="add" /> New project
 				</button>
 			</div>
+
+			{savingPlacement && (
+				<p className="management-notice" role="status">
+					Saving project order...
+				</p>
+			)}
+
+			{needsReload && (
+				<button
+					type="button"
+					className="utility-button"
+					onClick={retry}
+				>
+					Reload projects
+				</button>
+			)}
 
 			{notice && (
 				<p className="management-notice" role="status">
@@ -375,37 +505,56 @@ export default function ProjectsPage({
 					}}
 				>
 					<fieldset disabled={controlsDisabled}>
-						<label className="form-field">
-							<span>Project from this franchise</span>
+						<div className="form-fields">
+							<label className="form-field">
+								<span>Project from this franchise</span>
 
-							<select
-								value={existingProjectId}
-								onChange={(event) => setExistingProjectId(event.target.value)}
-								disabled={availableProjects.length === 0}
-								autoFocus
-								required
-							>
-								<option value="" disabled>
-									{availableProjects.length === 0
-										? "No other projects in this franchise"
-										: "Choose a project"}
-								</option>
-
-								{availableProjects.map((project) => (
-									<option key={project.id} value={project.id}>
-										{project.title}{" — "}
-										{formatUniverseLabel(
-											project.primary_universe_id,
-											universes
-										)}
+								<select
+									value={existingProjectId}
+									onChange={(event) => setExistingProjectId(event.target.value)}
+									disabled={availableProjects.length === 0}
+									autoFocus
+									required
+								>
+									<option value="" disabled>
+										{availableProjects.length === 0
+											? "No other projects in this franchise"
+											: "Choose a project"}
 									</option>
-								))}
-							</select>
 
-							<small>
-								Adds it at the end with empty cells. Use Edit to change its timeline position.
-							</small>
-						</label>
+									{availableProjects.map((project) => (
+										<option key={project.id} value={project.id}>
+											{project.title}{" — "}
+											{formatUniverseLabel(
+												project.primary_universe_id,
+												universes
+											)}
+										</option>
+									))}
+								</select>
+
+								<small>
+									Starts with empty appearance and events cells on this timeline.
+								</small>
+							</label>
+
+							<label className="form-field">
+								<span>Place in timeline</span>
+
+								<select
+									value={beforeProjectId}
+									onChange={event => setBeforeProjectId(event.target.value)}
+								>
+									<option value="">At the end</option>
+
+									{projects.map(project => (
+										<option key={project.id} value={project.id}>
+											{"<-"} {project.title}
+										</option>
+									))}
+								</select>
+							</label>
+						</div>
 
 						<div className="form-actions">
 							<button
@@ -413,7 +562,7 @@ export default function ProjectsPage({
 								className="utility-button"
 								disabled={!existingProjectId}
 							>
-								{linking ? "Adding..." : "Add to timeline"}
+								{savingPlacement ? "Adding..." : "Add to timeline"}
 							</button>
 
 							<button
@@ -441,78 +590,79 @@ export default function ProjectsPage({
 					}
 				</p>
 			) : (
-				<div className="management-table-container">
-					<table className="management-table">
-						<thead>
-							<tr>
-								<th scope="col">Order</th>
-								<th scope="col">Project</th>
-								<th scope="col">Release date</th>
-								{showOrigin && (
-									<th scope="col">Primary universe</th>
-								)}
-								<th scope="col">Actions</th>
-							</tr>
-						</thead>
+				<ProjectOrderTable
+					rows={matchingProjects}
+					disabled={
+						actionsDisabled ||
+						libraryOpen ||
+						!!query ||
+						projects.length < 2
+					}
+					onDraggingChange={setDragging}
+					onMove={handleMoveProject}
+					headers={
+						<>
+							<th scope="col">Project</th>
+							<th scope="col">Release date</th>
+							{showOrigin && (
+								<th scope="col">Primary universe</th>
+							)}
+							<th scope="col">Actions</th>
+						</>
+					}
+					renderCells={project => (
+						<>
+							<td className="management-name">
+								<strong>{project.title}</strong>
+							</td>
 
-						<tbody>
-							{matchingProjects.map(({ project, position }) => (
-								<tr key={project.id}>
-									<td>{position}</td>
+							<td>{project.release_date ?? "Not set"}</td>
 
-									<td className="management-name">
-										<strong>{project.title}</strong>
-									</td>
+							{showOrigin && (
+								<td>
+									{formatUniverseLabel(project.primary_universe_id, universes)}
+								</td>
+							)}
 
-									<td>{project.release_date ?? "Not set"}</td>
+							<td>
+								<div className="management-row-actions">
+									<button
+										type="button"
+										className="utility-button"
+										disabled={controlsDisabled}
+										aria-label={`Edit ${project.title}`}
+										onClick={() => openEditor(project)}
+									>
+										<UtilityIcon name="edit" /> Edit
+									</button>
 
-									{showOrigin && (
-										<td>
-											{formatUniverseLabel(project.primary_universe_id, universes)}
-										</td>
-									)}
+									<button
+										type="button"
+										className="utility-button"
+										disabled={controlsDisabled}
+										onClick={() => handleUnlinkProject(project)}
+									>
+										{removingId === project.id
+											? "Removing..."
+											: "Remove from timeline"}
+									</button>
 
-									<td>
-										<div className="management-row-actions">
-											<button
-												type="button"
-												className="utility-button"
-												disabled={controlsDisabled}
-												aria-label={`Edit ${project.title}`}
-												onClick={() => openEditor(project)}
-											>
-												<UtilityIcon name="edit" /> Edit
-											</button>
-
-											<button
-												type="button"
-												className="utility-button"
-												disabled={controlsDisabled}
-												onClick={() => handleUnlinkProject(project)}
-											>
-												{removingId === project.id
-													? "Removing..."
-													: "Remove from timeline"}
-											</button>
-
-											<button
-												type="button"
-												className="utility-button utility-button-danger"
-												disabled={controlsDisabled}
-												aria-label={`Delete ${project.title}`}
-												onClick={() => handleDelete(project)}
-											>
-												<UtilityIcon name="delete" />
-												{deletingId === project.id ? "Deleting..." : "Delete"}
-											</button>
-										</div>
-									</td>
-								</tr>
-							))}
-						</tbody>
-					</table>
-				</div>
+									<button
+										type="button"
+										className="utility-button utility-button-danger"
+										disabled={controlsDisabled}
+										aria-label={`Delete ${project.title}`}
+										onClick={() => handleDelete(project)}
+									>
+										<UtilityIcon name="delete" />
+										{deletingId === project.id ? "Deleting..." : "Delete"}
+									</button>
+								</div>
+							</td>
+						</>
+					)}
+				/>
 			)}
-		</section>
+		</section >
 	);
 }
