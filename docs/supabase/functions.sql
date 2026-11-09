@@ -1,7 +1,8 @@
--- Live reference snapshot: 20 October 2026, Timeline Viewer, PostgreSQL 17.
+-- Live reference snapshot: original functions 20 October 2026, PostgreSQL 17.
+-- place_project_in_universe added from read-only live inspection on 9 November 2026.
 -- Function bodies read with pg_get_functiondef through read-only Supabase MCP.
 -- Documentation only; no functions were created or changed by this export.
--- The three public functions use SECURITY INVOKER and an empty search_path.
+-- The public functions use SECURITY INVOKER and an empty search_path.
 -- Their EXECUTE grants exclude PUBLIC and anon; mutation functions obey RLS.
 -- The private boolean helper uses SECURITY DEFINER and an empty search_path
 -- to check timeline publication without recursively invoking universe policies.
@@ -242,3 +243,115 @@ GRANT EXECUTE ON FUNCTION private.can_read_timeline(p_universe_id bigint)
     TO postgres, anon, authenticated;
 
 
+
+-- Verified live addition: 9 November 2026. Catalog body and grants; no mutation executed.
+CREATE OR REPLACE FUNCTION public.place_project_in_universe(p_universe_id bigint, p_project_id bigint, p_expected_project_ids bigint[], p_before_project_id bigint, p_add boolean)
+ RETURNS SETOF projects
+ LANGUAGE plpgsql
+ SET search_path TO ''
+AS $function$
+declare
+  v_current_ids bigint[];
+  v_other_ids bigint[];
+  v_position integer;
+begin
+  if not coalesce(public.is_studio_owner(), false) then
+    raise exception 'Studio owner access is required.'
+      using errcode = '42501';
+  end if;
+
+  if p_project_id is null or p_add is null then
+    raise exception 'Project and action are required.';
+  end if;
+
+  -- Use the same lock as the existing project save/link functions.
+  perform 1
+  from public.universes
+  where id = p_universe_id
+  for update;
+
+  if not found then
+    raise exception 'Timeline is unavailable.';
+  end if;
+
+  -- Prevent existing links being deleted during this operation.
+  select coalesce(
+    array_agg(link.project_id order by link.timeline_position),
+    '{}'::bigint[]
+  )
+  into v_current_ids
+  from (
+    select project_id, timeline_position
+    from public.universe_projects
+    where universe_id = p_universe_id
+    order by timeline_position
+    for update
+  ) link;
+
+  if v_current_ids is distinct from p_expected_project_ids then
+    raise exception 'The timeline order changed. Reload it before trying again.'
+      using errcode = 'PT409';
+  end if;
+
+  if p_add and p_project_id = any(v_current_ids) then
+    raise exception 'The project is already linked.';
+  elsif not p_add and not (p_project_id = any(v_current_ids)) then
+    raise exception 'The project is no longer linked.';
+  end if;
+
+  v_other_ids := array_remove(v_current_ids, p_project_id);
+
+  v_position := case
+    when p_before_project_id is null
+      then cardinality(v_other_ids) + 1
+    else array_position(v_other_ids, p_before_project_id)
+  end;
+
+  if v_position is null then
+    raise exception 'The placement target is no longer available.';
+  end if;
+
+  set constraints public.universe_projects_position_key deferred;
+
+  if p_add then
+    insert into public.universe_projects (
+      universe_id,
+      project_id,
+      timeline_position
+    )
+    values (p_universe_id, p_project_id, 1);
+  end if;
+
+  with new_order as (
+    select
+      item.project_id,
+      (
+        item.ordinality +
+        case when item.ordinality >= v_position then 1 else 0 end
+      )::integer as position
+    from unnest(v_other_ids)
+      with ordinality as item(project_id, ordinality)
+
+    union all
+
+    select p_project_id, v_position
+  )
+  update public.universe_projects up
+  set timeline_position = new_order.position
+  from new_order
+  where up.universe_id = p_universe_id
+    and up.project_id = new_order.project_id;
+
+  set constraints public.universe_projects_position_key immediate;
+
+  return query
+    select p.*
+    from public.projects p
+    join public.universe_projects up on up.project_id = p.id
+    where up.universe_id = p_universe_id
+    order by up.timeline_position;
+end;
+$function$
+
+REVOKE EXECUTE ON FUNCTION public.place_project_in_universe(bigint, bigint, bigint[], bigint, boolean) FROM PUBLIC, anon, authenticated;
+GRANT EXECUTE ON FUNCTION public.place_project_in_universe(bigint, bigint, bigint[], bigint, boolean) TO postgres, authenticated, service_role;

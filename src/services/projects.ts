@@ -18,9 +18,7 @@ export async function getProjectsForUniverse(
 
 	if (linksError) throw linksError;
 
-	if (!links || links.length === 0) {
-		return [];
-	}
+	if (!links || links.length === 0) return [];
 
 	const projectIds = (links as UniverseProjectLink[]).map(
 		(link) => link.project_id
@@ -118,6 +116,33 @@ export async function unlinkProjectToUniverse(
 		.single();
 
 	if (error) throw error;
+}
+
+export async function placeProjectInUniverse(
+	universeId: number,
+	projectId: number,
+	expectedProjectIds: number[],
+	beforeProjectId: number | null,
+	add: boolean
+): Promise<Project[]> {
+	const { data, error } = await supabase.rpc(
+		"place_project_in_universe",
+		{
+			p_universe_id: universeId,
+			p_project_id: projectId,
+			p_expected_project_ids: expectedProjectIds,
+			p_before_project_id: beforeProjectId,
+			p_add: add
+		}
+	);
+
+	if (error) throw error;
+
+	if (!data) {
+		throw new Error("The saved project order was not returned.")
+	}
+
+	return data;
 }
 
 export async function deleteProject(id: number): Promise<void> {

@@ -142,3 +142,9 @@ Apply relevant principles to this app. No specific third-party brand style has b
 - Existing-project linking belongs behind an Add existing toolbar toggle. Preserve its explanatory append/empty-cells copy, failure recovery and availability while scrolling.
 - Viewer and Studio cell popups share a fixed character/project/close heading, scrollable body, edge-to-edge section rules and explicit Appearance/Event headings. Two-column choice buttons reduce vertical length without reducing touch targets; selected buttons expose aria-pressed. No modal/dialog system replacement or long-press gesture.
 - Record upcoming metadata design: media types, useful release dates and subtle owner-chosen major-project emphasis. Resolve scope and semantics before storage or timeline-header changes.
+
+## Project ordering proposal — 9 November 2026
+
+- Add a compact drag grip beside each order number. Only the grip starts dragging; ordinary swipes on project content continue scrolling. Provide 44px touch targets, keyboard instructions and named announcements, Escape cancellation and a floating project-title preview.
+- Save a drop immediately, show progress and prevent overlapping edits. A stale or uncertain save reloads the actual order; an unsuccessful reload locks changes until retry. Disable drag during search so hidden projects cannot move unexpectedly.
+- Retain title-based Before/At the end placement for precise moves and give Add existing the same placement choice. Preserve the conditional origin column, sticky headings and existing compact layout.
