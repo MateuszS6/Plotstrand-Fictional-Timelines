@@ -38,6 +38,7 @@ export async function getProjectsForUniverse(
 		])
 	);
 
+	// The projects query's IN filter does not guarantee order; the link rows do.
 	return links.flatMap((link) => {
 		const project =
 			projectMap.get(link.project_id);

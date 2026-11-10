@@ -26,6 +26,7 @@ export function formatUniverseCode(
 		franchiseName.trim().toLowerCase()
 	);
 
+	// Locations can have codes too, but Earth- is a universe designation only.
 	return universeType === "universe" &&
 		usesEarthCodes &&
 		!/^earth[-\s]/i.test(value)

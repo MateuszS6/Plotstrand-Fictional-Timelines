@@ -8,6 +8,7 @@ export function collectCharacterIds(
 	appearances: Appearance[],
 	events: CharacterEvent[]
 ): number[] {
+	// Origin alone does not make a character part of this timeline.
 	return [...new Set([
 		...appearances.map((appearance) => appearance.character_id),
 		...events.map((event) => event.character_id)

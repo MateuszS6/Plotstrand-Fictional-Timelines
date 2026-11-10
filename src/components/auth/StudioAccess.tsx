@@ -41,7 +41,6 @@ export default function StudioAccess({
 	const userId = session?.user.id;
 	const activeUserId = useRef<string | undefined>(undefined);
 
-	// Listens for sign-in/session changes
 	useEffect(() => {
 		const { data } = supabase.auth.onAuthStateChange(
 			(_event, nextSession) => {
@@ -58,7 +57,6 @@ export default function StudioAccess({
 		return () => data.subscription.unsubscribe();
 	}, []);
 
-	// Calls the database helper
 	useEffect(() => {
 		if (!userId) return;
 

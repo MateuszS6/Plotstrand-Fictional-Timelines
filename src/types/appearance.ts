@@ -5,7 +5,7 @@ export type AppearanceType =
 	| "depiction" // Covers statues, paintings, photographs and similar representations
 	| "vision"
 	| "afterlife"
-	| "non_chronological"; //
+	| "non_chronological"; // Covers normal scenes and post-credit scenes that happen at a different point in the timeline
 
 export const APPEARANCE_OPTIONS: {
 	value: AppearanceType;
@@ -28,7 +28,6 @@ export interface Appearance {
 	is_detached: boolean;
 }
 
-// Optional (?) updates
 export interface AppearanceUpdate {
 	appearance_type?: AppearanceType;
 	is_detached?: boolean;

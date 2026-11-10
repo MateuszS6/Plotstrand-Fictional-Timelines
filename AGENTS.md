@@ -11,7 +11,7 @@ Plotstrand is a React and TypeScript app built with Vite. Supabase stores timeli
 ## Implement, verify and explain
 
 - Keep the diff focused, follow existing conventions and preserve unrelated work. Prefer direct edits within the delegated scope to large code dumps in chat.
-- Prefer clear code. Use comments for non-obvious intent, domain rules, assumptions, workarounds or constraints. Omit comments that narrate obvious code.
+- Prefer clear names and structure over explanatory comments for straightforward code. Add a comment when it preserves context that is difficult to infer from the implementation, such as a domain rule, important assumption, workaround and its reason, unusual database/query behaviour, performance or compatibility constraint, or why an apparent simpler approach would be wrong. Keep the comment close to the relevant code and update or remove it when that context changes. Do not use comments to restate the next statement or routine control flow; section labels are useful only when they materially improve navigation in a long file. Do not add comments broadly as a cleanup exercise.
 - Use `npm run lint` and `npm run build` for application changes. Check the affected user flow and relevant failure paths when behaviour changes. Report what passed and anything material that remains unverified.
 - After meaningful direct implementation, explain what changed and why. Trace the relevant data or control flow, call out unfamiliar APIs or patterns and significant trade-offs or alternatives considered, and point to the few changed areas the maintainer should read first. Scale the walkthrough to the complexity of the change.
 

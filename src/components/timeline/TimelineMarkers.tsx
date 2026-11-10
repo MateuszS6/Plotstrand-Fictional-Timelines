@@ -17,6 +17,7 @@ export default function TimelineMarkers({
 	characterEvent,
 	isFirstConnected = false
 }: TimelineMarkersProps) {
+	// Only an at-project event on a connected standard appearance can share its marker.
 	const mergedEvent =
 		characterEvent?.event_position === "at" &&
 			appearance?.appearance_type === "standard" &&

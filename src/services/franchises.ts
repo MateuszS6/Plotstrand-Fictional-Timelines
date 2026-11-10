@@ -4,6 +4,7 @@ import type { Franchise, FranchiseInput } from "../types/franchise";
 export async function getFranchises(
 	publicOnly = false
 ): Promise<Franchise[]> {
+	// Public results require at least one published universe in the franchise.
 	const query = publicOnly
 		? supabase.from("franchises")
 			.select("id, name, universes!inner(id)")
