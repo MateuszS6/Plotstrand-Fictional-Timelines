@@ -1,6 +1,6 @@
 # Plotstrand — design direction
 
-Agreed 23 October 2026; refined 30 October 2026. This is a working direction, not a final brand or a claim that every change below is already implemented.
+Agreed 23 October 2026; refined 30 October 2026. This is a working direction, not a final brand or a claim that every change below is already implemented. Dated workflow notes describe past practice. [AGENTS.md](AGENTS.md) governs current work.
 
 ## Purpose and character
 
