@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import UtilityIcon from "../components/layout/UtilityIcon";
 import ProjectForm from "../components/projects/ProjectForm";
 import ProjectOrderTable from "../components/projects/ProjectOrderTable";
+import ProjectPlacementField from "../components/projects/ProjectPlacementField";
 import { useWorkspace } from "../context/WorkspaceContext";
 import { deleteProject, getProjectsForPrimaryUniverses, getProjectsForUniverse, placeProjectInUniverse, saveProjectInUniverse, unlinkProjectToUniverse } from "../services/projects";
 import type { Project, ProjectInput } from "../types/project";
@@ -518,7 +519,7 @@ export default function ProjectsPage({
 								>
 									<option value="" disabled>
 										{availableProjects.length === 0
-											? "No other projects in this franchise"
+										? "No unlinked projects in this franchise"
 											: "Choose a project"}
 									</option>
 
@@ -534,26 +535,16 @@ export default function ProjectsPage({
 								</select>
 
 								<small>
-									Starts with empty appearance and events cells on this timeline.
+									The project starts with empty cells on this timeline.
 								</small>
 							</label>
 
-							<label className="form-field">
-								<span>Place in timeline</span>
-
-								<select
-									value={beforeProjectId}
-									onChange={event => setBeforeProjectId(event.target.value)}
-								>
-									<option value="">At the end</option>
-
-									{projects.map(project => (
-										<option key={project.id} value={project.id}>
-											{"<-"} {project.title}
-										</option>
-									))}
-								</select>
-							</label>
+							<ProjectPlacementField
+								projects={projects}
+								beforeProjectId={beforeProjectId}
+								onChange={setBeforeProjectId}
+								disabled={availableProjects.length === 0}
+							/>
 						</div>
 
 						<div className="form-actions">

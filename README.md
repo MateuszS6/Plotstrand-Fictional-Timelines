@@ -9,7 +9,7 @@ and events within each universe.
 
 ## Current version — `0.8.0`
 
-Robust project drag-and-drop.
+Studio projects support drag-and-drop and placement by project title. Project forms keep the release date picker within the form on narrow screens.
 
 **Previous:** touch-friendly timeline editing, support for locations and realms, searchable compact management pages, and clearer cell details and controls.
 

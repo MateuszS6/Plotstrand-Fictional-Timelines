@@ -136,7 +136,8 @@
 	min-width: 0;
 }
 
-.form-field>span {
+.form-field > span,
+.form-field > label {
 	color: var(--color-primary);
 	font-size: 14px;
 }
@@ -300,6 +301,19 @@
 	}
 }
 
+@supports (-webkit-touch-callout: none) {
+
+	/* iOS Safari's native date control can exceed the form column's width. */
+	.form-field input[type="date"] {
+		appearance: none;
+		max-width: 100%;
+	}
+
+	.form-field input[type="date"]::-webkit-date-and-time-value {
+		text-align: start;
+	}
+}
+
 /* Drag-and-drop ordering */
 
 .project-order-cell {
@@ -345,6 +359,8 @@
 
 	.management-page-compact .utility-button,
 	.management-page-compact .management-search input,
+	.management-form .form-field > input,
+	.management-form .form-field > select,
 	.management-filter {
 		min-height: 44px;
 	}

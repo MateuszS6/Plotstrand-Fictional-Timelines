@@ -18,7 +18,7 @@
 	font-size: 24px;
 }
 
-.studio-login>p {
+.studio-login > p {
 	margin: 0 0 2px;
 }
 
@@ -82,7 +82,7 @@
 	overflow: hidden;
 }
 
-.studio-shell>.app-layout {
+.studio-shell > .app-layout {
 	flex: 1;
 	min-height: 0;
 	height: auto;

@@ -45,6 +45,7 @@
 }
 
 @media (any-pointer: coarse) {
+
 	.close-button,
 	.anchored-popup .close-button {
 		flex-basis: 44px;

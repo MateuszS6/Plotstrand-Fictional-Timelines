@@ -1,6 +1,7 @@
 import { useRef, useState, type SubmitEvent } from "react";
 import type { Project, ProjectInput } from "../../types/project";
 import type { Universe } from "../../types/universe";
+import ProjectPlacementField from "./ProjectPlacementField";
 
 interface ProjectFormProps {
 	project: Project | null;
@@ -183,22 +184,11 @@ export default function ProjectForm({
 						</small>
 					</label>
 
-					<label className="form-field">
-						<span>Place in this timeline</span>
-
-						<select
-							value={beforeProjectId}
-							onChange={(event) => setBeforeProjectId(event.target.value)}
-						>
-							<option value="">At the end</option>
-
-							{projects.map(project => (
-								<option key={project.id} value={project.id}>
-									{"->"} {project.title}
-								</option>
-							))}
-						</select>
-					</label>
+					<ProjectPlacementField
+						projects={otherProjects}
+						beforeProjectId={beforeProjectId}
+						onChange={setBeforeProjectId}
+					/>
 				</div>
 
 				{project && (

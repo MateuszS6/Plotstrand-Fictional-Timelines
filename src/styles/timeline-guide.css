@@ -40,7 +40,7 @@
 	font-size: 18px;
 }
 
-.timeline-legend-popup>.legend-body {
+.timeline-legend-popup > .legend-body {
 	flex: 1 1 auto;
 	min-height: 0;
 	overflow-y: auto;
@@ -53,14 +53,14 @@
 	border-top: 1px solid var(--border-primary);
 }
 
-.legend-section>summary {
+.legend-section > summary {
 	padding: 10px 0;
 	font-size: 14px;
 	font-weight: 600;
 	cursor: pointer;
 }
 
-.legend-section>summary:focus-visible {
+.legend-section > summary:focus-visible {
 	outline: 2px solid var(--color-link);
 	outline-offset: 2px;
 }

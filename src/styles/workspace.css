@@ -266,7 +266,7 @@
 	color: #a3d8bd;
 }
 
-.page-heading>.timeline-status {
+.page-heading > .timeline-status {
 	margin-top: 6px;
 }
 
@@ -315,7 +315,7 @@ a[aria-disabled="true"] {
 		margin-left: 0;
 	}
 
-	.workspace-switcher>span {
+	.workspace-switcher > span {
 		display: none;
 	}
 

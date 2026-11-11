@@ -24,8 +24,8 @@
 	gap: 0;
 }
 
-.main-content-timeline>.status-message,
-.main-content-timeline>.management-notice {
+.main-content-timeline > .status-message,
+.main-content-timeline > .management-notice {
 	margin: 12px 20px;
 }
 
@@ -121,8 +121,8 @@
 		padding: 10px 12px;
 	}
 
-	.main-content-timeline>.status-message,
-	.main-content-timeline>.management-notice {
+	.main-content-timeline > .status-message,
+	.main-content-timeline > .management-notice {
 		margin: 10px 12px;
 	}
 
