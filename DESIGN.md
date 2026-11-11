@@ -112,8 +112,17 @@ Apply relevant principles to this app. No specific third-party brand style has b
 
 ## Project media types and mobile wrapping — 2 November 2026
 
-- Backlog: distinguish films, shows, videos and other agreed project types with a shared project field, an editable Studio choice/Type column and a restrained label/icon on timeline headings. Settle categories and existing-record handling in the implementation pass; do not use colour as the only distinction.
+- Original backlog: distinguish films, shows, videos and other agreed project types with a shared project field, an editable Studio choice/Type column and a restrained label/icon on timeline headings. The agreed 11 November scope below supersedes the open category/presentation decisions; do not use colour as the only distinction.
 - Browsing-toolbar summaries must fit their container before text wrapping can work. The reviewed correction adds max-width: 100% and overflow-wrap: anywhere to management-summary, preserving vertical height in column layouts and intentional horizontal scrolling for timeline/table content. This CSS correction remains user-applied from chat.
+
+## Agreed project metadata design — 11 November 2026
+
+- Planning only, not implemented. See the [implementation plan](docs/development-plan.md#project-metadata-planning--11-november-2026).
+- Offer Film, Series, Short, Special, Video and Game as optional shared project types. Start unset, with Film first among actual choices. Use the existing title to express series/season coverage; do not impose a hierarchy or rename existing projects.
+- In both Viewer and Studio timeline headings, retain the title as the primary text and place a small type icon/text label and release year beneath it. Omit each missing value cleanly. Preserve readable titles, column alignment, sticky headings and horizontal scrolling.
+- Mark manually selected major projects with a small star and subtle heading accent, shared across every timeline containing that project. Give the marker an accessible Major project label; it is not a favourite button. Avoid full-column tinting or colour-only meaning.
+- In project management, add a Type column, show the major marker beside the title, and format the full release date readably (for example 6 Apr 2022). Use Not set for absent type/date values. The form gets a Type select and Major project checkbox and retains its optional full-date input.
+- The date means the first release of the material represented by that column. No ranges, partial-date storage or chronology changes. Display year by default; defer a show/hide-year control and clickable project details to later passes.
 
 ## Clarity pass proposal — 3 November 2026
 
