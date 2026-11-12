@@ -5,6 +5,8 @@
 -- schema objects retain the snapshot/review dates documented below.
 -- Targeted update 6 November 2026: verified universes.universe_type, its
 -- non-null universe default and universe/location check. Other objects unchanged.
+-- Targeted update 11 November 2026: verified projects.media_type, projects.is_major
+-- and projects_media_type_check after applying the project metadata SQL.
 -- Documentation only: this is not a migration or a complete pg_dump backup.
 -- Includes public application tables, column defaults/identity modes, named
 -- constraints (and their indexes), RLS policies, and table/sequence privileges.
@@ -47,6 +49,9 @@ CREATE TABLE public.projects (
     title text NOT NULL,
     release_date date,
     primary_universe_id bigint NOT NULL,
+    media_type text,
+    is_major boolean DEFAULT false NOT NULL,
+    CONSTRAINT projects_media_type_check CHECK ((media_type = ANY (ARRAY['film'::text, 'series'::text, 'short'::text, 'special'::text, 'video'::text, 'game'::text]))),
     CONSTRAINT projects_pkey PRIMARY KEY (id),
     CONSTRAINT projects_primary_universe_id_fkey FOREIGN KEY (primary_universe_id) REFERENCES public.universes(id) ON DELETE RESTRICT,
     CONSTRAINT projects_title_key UNIQUE (title)

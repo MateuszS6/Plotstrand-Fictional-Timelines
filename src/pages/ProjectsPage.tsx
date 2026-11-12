@@ -1,12 +1,18 @@
 import { useEffect, useRef, useState } from "react";
 import UtilityIcon from "../components/layout/UtilityIcon";
+import MajorProjectMarker from "../components/projects/MajorProjectMarker";
 import ProjectForm from "../components/projects/ProjectForm";
 import ProjectOrderTable from "../components/projects/ProjectOrderTable";
 import ProjectPlacementField from "../components/projects/ProjectPlacementField";
 import { useWorkspace } from "../context/WorkspaceContext";
 import { deleteProject, getProjectsForPrimaryUniverses, getProjectsForUniverse, placeProjectInUniverse, saveProjectInUniverse, unlinkProjectToUniverse } from "../services/projects";
-import type { Project, ProjectInput } from "../types/project";
+import { projectMediaTypes, type Project, type ProjectInput } from "../types/project";
 import { formatUniverseLabel } from "../utils/formatUniverseLabel";
+
+const releaseDateFormatter = new Intl.DateTimeFormat("en-GB", {
+	dateStyle: "medium",
+	timeZone: "UTC"
+});
 
 interface ProjectsPageProps {
 	universeId: number;
@@ -594,6 +600,7 @@ export default function ProjectsPage({
 					headers={
 						<>
 							<th scope="col">Project</th>
+							<th scope="col">Type</th>
 							<th scope="col">Release date</th>
 							{showOrigin && (
 								<th scope="col">Primary universe</th>
@@ -605,9 +612,17 @@ export default function ProjectsPage({
 						<>
 							<td className="management-name">
 								<strong>{project.title}</strong>
+								{project.is_major && <> <MajorProjectMarker /></>}
 							</td>
 
-							<td>{project.release_date ?? "Not set"}</td>
+							<td>{project.media_type ? projectMediaTypes[project.media_type] : "Not set"}</td>
+							<td>
+								{project.release_date ? (
+									<time dateTime={project.release_date}>
+										{releaseDateFormatter.format(new Date(project.release_date))}
+									</time>
+								) : "Not set"}
+							</td>
 
 							{showOrigin && (
 								<td>

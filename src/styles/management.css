@@ -147,6 +147,20 @@
 	line-height: 1.4;
 }
 
+.project-major-field {
+	display: flex;
+	align-items: center;
+	align-self: end;
+	gap: 8px;
+	min-height: 44px;
+	color: var(--color-primary);
+	font-size: 14px;
+}
+
+.project-major-field input {
+	accent-color: var(--color-link);
+}
+
 .form-field input,
 .form-field select {
 	width: 100%;
@@ -270,7 +284,7 @@
 	font-size: 12px;
 }
 
-.management-table tr[data-other-origin="true"] {
+.management-table tr[data-other-origin="true"][data-participating="true"] {
 	background: rgba(156, 202, 255, 0.04);
 }
 

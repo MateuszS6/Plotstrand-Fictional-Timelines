@@ -78,7 +78,9 @@ export async function saveProjectInUniverse(
 			p_title: input.title,
 			p_release_date: input.release_date,
 			p_primary_universe_id: input.primary_universe_id,
-			p_position: position
+			p_position: position,
+			p_media_type: input.media_type,
+			p_is_major: input.is_major
 		}
 	);
 

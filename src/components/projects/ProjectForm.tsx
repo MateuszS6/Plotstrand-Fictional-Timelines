@@ -1,5 +1,5 @@
 import { useRef, useState, type SubmitEvent } from "react";
-import type { Project, ProjectInput } from "../../types/project";
+import { projectMediaTypes, type Project, type ProjectInput, type ProjectMediaType } from "../../types/project";
 import type { Universe } from "../../types/universe";
 import ProjectPlacementField from "./ProjectPlacementField";
 
@@ -22,6 +22,8 @@ export default function ProjectForm({
 }: ProjectFormProps) {
 	const [title, setTitle] = useState(project?.title ?? "");
 	const [releaseDate, setReleaseDate] = useState(project?.release_date ?? "");
+	const [mediaType, setMediaType] = useState<ProjectMediaType | "">(project?.media_type ?? "");
+	const [isMajor, setIsMajor] = useState(project?.is_major ?? false);
 
 	const [primaryUniverseId, setPrimaryUniverseId] = useState<number>(
 		project?.primary_universe_id ?? universeId
@@ -95,7 +97,9 @@ export default function ProjectForm({
 				{
 					title: trimmedTitle,
 					release_date: releaseDate || null,
-					primary_universe_id: primaryUniverseId
+					primary_universe_id: primaryUniverseId,
+					media_type: mediaType || null,
+					is_major: isMajor
 				},
 				nextPosition
 			);
@@ -156,6 +160,28 @@ export default function ProjectForm({
 							value={releaseDate}
 							onChange={(event) => setReleaseDate(event.target.value)}
 						/>
+					</label>
+
+					<label className="form-field">
+						<span>Type</span>
+						<select
+							value={mediaType}
+							onChange={(event) => setMediaType(event.target.value as ProjectMediaType | "")}
+						>
+							<option value="">Not set</option>
+							{Object.entries(projectMediaTypes).map(([value, label]) => (
+								<option key={value} value={value}>{label}</option>
+							))}
+						</select>
+					</label>
+
+					<label className="project-major-field">
+						<input
+							type="checkbox"
+							checked={isMajor}
+							onChange={(event) => setIsMajor(event.target.checked)}
+						/>
+						Major project
 					</label>
 
 					<label className="form-field">

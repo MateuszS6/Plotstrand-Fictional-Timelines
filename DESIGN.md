@@ -117,7 +117,7 @@ Apply relevant principles to this app. No specific third-party brand style has b
 
 ## Agreed project metadata design — 11 November 2026
 
-- Planning only, not implemented. See the [implementation plan](docs/development-plan.md#project-metadata-planning--11-november-2026).
+- Implemented locally. See the [scope and rollout](docs/development-plan.md#project-metadata--11-november-2026).
 - Offer Film, Series, Short, Special, Video and Game as optional shared project types. Start unset, with Film first among actual choices. Use the existing title to express series/season coverage; do not impose a hierarchy or rename existing projects.
 - In both Viewer and Studio timeline headings, retain the title as the primary text and place a small type icon/text label and release year beneath it. Omit each missing value cleanly. Preserve readable titles, column alignment, sticky headings and horizontal scrolling.
 - Mark manually selected major projects with a small star and subtle heading accent, shared across every timeline containing that project. Give the marker an accessible Major project label; it is not a favourite button. Avoid full-column tinting or colour-only meaning.

@@ -7,9 +7,11 @@ Inspired by an Excel workflow, Plotstrand uses character rows,
 chronological project columns and visual lifelines to track appearances
 and events within each universe.
 
-## Current version — `0.8.0`
+## Current version — `0.8.1`
 
 Studio projects support drag-and-drop and placement by project title. Project forms keep the release date picker within the form on narrow screens.
+
+The next frontend update adds optional project types and major-project markers in Studio, with type and release year in Viewer and Studio timeline headings. Project management shows the full release date. The supporting [Supabase change](docs/supabase/changes/project-metadata.sql) is live.
 
 **Previous:** touch-friendly timeline editing, support for locations and realms, searchable compact management pages, and clearer cell details and controls.
 
