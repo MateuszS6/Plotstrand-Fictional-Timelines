@@ -276,6 +276,10 @@
 	font-weight: 600;
 }
 
+.management-name[data-major="true"] strong {
+	font-weight: 700;
+}
+
 .management-name small,
 .management-origin-note {
 	display: block;

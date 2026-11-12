@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import UtilityIcon from "../components/layout/UtilityIcon";
-import MajorProjectMarker from "../components/projects/MajorProjectMarker";
 import ProjectForm from "../components/projects/ProjectForm";
 import ProjectOrderTable from "../components/projects/ProjectOrderTable";
 import ProjectPlacementField from "../components/projects/ProjectPlacementField";
@@ -610,9 +609,9 @@ export default function ProjectsPage({
 					}
 					renderCells={project => (
 						<>
-							<td className="management-name">
+							<td className="management-name" data-major={project.is_major || undefined}>
 								<strong>{project.title}</strong>
-								{project.is_major && <> <MajorProjectMarker /></>}
+								{project.is_major && <small>Major project</small>}
 							</td>
 
 							<td>{project.media_type ? projectMediaTypes[project.media_type] : "Not set"}</td>

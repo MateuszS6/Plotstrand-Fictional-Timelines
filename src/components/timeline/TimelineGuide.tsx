@@ -53,7 +53,8 @@ export default function TimelineGuide() {
 					<div className="legend-body">
 						<p className="legend-copy">
 							Rows follow characters. Projects run left to right in
-							timeline order, not release order.
+							timeline order, not release order. Bold headings
+							mark major projects.
 						</p>
 
 						<p className="legend-copy">

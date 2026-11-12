@@ -1,6 +1,5 @@
 import { projectMediaTypes, type Project } from "../../types/project";
 import UtilityIcon from "../layout/UtilityIcon";
-import MajorProjectMarker from "../projects/MajorProjectMarker";
 
 interface TimelineHeaderProps {
 	projects: Project[];
@@ -23,8 +22,8 @@ export default function TimelineHeader({
 					title={project.title}
 				>
 					<span className="project-heading-title">
-						{project.is_major && <><MajorProjectMarker /> </>}
 						{project.title}
+						{project.is_major && <span className="visually-hidden">, major project</span>}
 					</span>
 					{(project.media_type || project.release_date) && (
 						<div className="project-heading-metadata">

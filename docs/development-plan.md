@@ -1,6 +1,6 @@
 # Plotstrand development plan
 
-Updated 11 November 2026. The README and package identify v0.8.0. Studio search, compact management, touch editing, Universe/Location kinds, shared popup controls and project ordering are implemented. The ordering fixes passed local TypeScript, lint, build and browser checks with sample data on 9 November.
+Updated 12 November 2026. Studio search, compact management, touch editing, Universe/Location kinds, shared popup controls and project ordering are implemented. The ordering fixes passed local TypeScript, lint, build and browser checks with sample data on 9 November.
 
 [AGENTS.md](../AGENTS.md) is the repository workflow guide. Start with the current priorities below. Use the [development history](development-history.md) only for relevant earlier decisions or verification.
 
@@ -37,7 +37,7 @@ Application changes are available locally. The [project metadata change](supabas
 - Keep the type on the shared project, editable in Studio, with a Type column in project management. Existing records begin unset; never infer types from titles or default the existing library to Film.
 - Omit unset types from timeline headings. Use a small icon plus text label below the project title for set types, consistently in Viewer and Studio; revisit visual prominence after review.
 - Preserve quick creation and editing: type remains optional, initially Not set, with Film first among actual choices. Type filtering is not included in this pass.
-- Major project is a manual shared checkbox, initially off. A change applies wherever that project is linked. Use a small star with an accessible Major project label and a subtle heading accent; do not tint the entire column. Show the marker beside the title in project management, avoiding another wide table column.
+- Major project is a manual shared checkbox, initially off. A change applies wherever that project is linked. The 12 November refinement uses a bold title, with the major status available to screen readers. Projects management uses a heavier title and a Major project label beneath it.
 - Reuse one optional release date: the first release of the material represented by the column. For a whole series or seasons 1–7 this is the first included episode's release; for a single season it is that season's premiere. Preserve existing stored dates; no automatic correction, lookup, release-region system or date range.
 - Show only the release year on both Viewer and Studio timelines, in a quiet metadata line beneath the title alongside the type. Independently omit missing type/date values without leaving empty separators or placeholder badges. These values never change chronology.
 - Show the full release date in Projects management, using an unambiguous readable format such as 6 Apr 2022; use Not set when absent. Retain the optional native full-date input in the form. Year-only entry/partial-date storage is not added in this pass; an unknown exact date may remain unset.
@@ -59,7 +59,7 @@ Live verification confirmed that all 173 existing projects retained their rows a
 - Toggle major status on/off and confirm the same shared metadata after reloading two linked timelines. Unlink/relink and reorder preserve metadata and existing chronology rules; no appearances/events are changed by a metadata-only edit.
 - Check all combinations of absent/present type, date and major status, including long titles and multi-season names. Both timelines show only the year; management shows the full date. Include a date near 1 January to catch timezone-induced year shifts. Unknown dates stay blank on timelines.
 - Failed saves retain form inputs and do not leave partially saved metadata/order. Old-client saves during rollout preserve newly set metadata. Check Viewer read-only access and existing owner-only writes.
-- Check desktop and narrow/touch layouts, sticky header alignment, accessible type/major labels and contrast. Labels remain understandable without colour and without hover; the star must not imply an interactive favourite control.
+- Check desktop and narrow/touch layouts, sticky header alignment, accessible type/major labels and contrast. The weight difference and text alternatives convey major status without relying on shading or hover.
 - Run npm run lint and npm run build for application changes, plus focused flow/database checks in an authorised test environment. Record any production/physical-device verification that remains outstanding.
 
 ## Product rules

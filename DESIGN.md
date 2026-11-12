@@ -120,8 +120,8 @@ Apply relevant principles to this app. No specific third-party brand style has b
 - Implemented locally. See the [scope and rollout](docs/development-plan.md#project-metadata--11-november-2026).
 - Offer Film, Series, Short, Special, Video and Game as optional shared project types. Start unset, with Film first among actual choices. Use the existing title to express series/season coverage; do not impose a hierarchy or rename existing projects.
 - In both Viewer and Studio timeline headings, retain the title as the primary text and place a small type icon/text label and release year beneath it. Omit each missing value cleanly. Preserve readable titles, column alignment, sticky headings and horizontal scrolling.
-- Mark manually selected major projects with a small star and subtle heading accent, shared across every timeline containing that project. Give the marker an accessible Major project label; it is not a favourite button. Avoid full-column tinting or colour-only meaning.
-- In project management, add a Type column, show the major marker beside the title, and format the full release date readably (for example 6 Apr 2022). Use Not set for absent type/date values. The form gets a Type select and Major project checkbox and retains its optional full-date input.
+- The 12 November refinement gives major projects a bold title in the primary text colour. A screen reader can read the major status after the title, and the timeline guide explains the visual cue. Link and focus cues keep their existing accent colour.
+- In project management, use a heavier title with a quiet Major project label beneath it. Keep the Type column and format the full release date readably (for example 6 Apr 2022). Use Not set for absent type/date values. The form has a Type select, a Major project checkbox and an optional full-date input.
 - The date means the first release of the material represented by that column. No ranges, partial-date storage or chronology changes. Display year by default; defer a show/hide-year control and clickable project details to later passes.
 
 ## Clarity pass proposal — 3 November 2026
