@@ -1,15 +1,15 @@
-import { useEffect, useRef } from 'react';
+import { lazy, Suspense, useEffect, useRef } from 'react';
 import { Navigate, useBlocker, useLocation, useNavigate } from 'react-router';
 import PageTitle from './components/layout/PageTitle';
 import TimelineStatus from './components/layout/TimelineStatus';
 import WorkspaceBar from './components/layout/WorkspaceBar';
 import TimelineGuide from './components/timeline/TimelineGuide';
 import { useWorkspace } from './context/WorkspaceContext';
-import CharactersPage from './pages/CharactersPage';
-import ProjectsPage from './pages/ProjectsPage';
-import TimelinePage from './pages/TimelinePage';
+const CharactersPage = lazy(() => import('./pages/CharactersPage'));
+const ProjectsPage = lazy(() => import('./pages/ProjectsPage'));
+const TimelinePage = lazy(() => import('./pages/TimelinePage'));
 import UnavailablePage from './pages/UnavailablePage';
-import WorkspacesPage from './pages/WorkspacesPage';
+const WorkspacesPage = lazy(() => import('./pages/WorkspacesPage'));
 import type { Character } from './types/character';
 import type { WorkspaceView } from './types/workspace';
 import { formatUniverseCode } from './utils/formatUniverseLabel';
@@ -228,42 +228,52 @@ export default function App({
 							Try again
 						</button>
 					</div>
-				) : isBrowsing ? (
-					<WorkspacesPage
-						key={activeView}
-						level={activeView}
-					/>
-				) : selectedUniverseId !== null && isTimeline ? (
-					<TimelinePage
-						key={
-							selectedUniverseId + ":" +
-							(focusedCharacterId ?? "all")
+				) : (
+					<Suspense
+						fallback={
+							<p className='status-message' role='status'>
+								Loading page...
+							</p>
 						}
-						universeId={selectedUniverseId}
-						focusedCharacterId={focusedCharacterId}
-						onOpenOrigin={(character) =>
-							openCharacterTimeline(
-								character.origin_universe_id,
-								character
-							)
-						}
-					/>
-				) : selectedUniverseId !== null && activeView === "characters" && canEdit ? (
-					<CharactersPage
-						key={selectedUniverseId}
-						universeId={selectedUniverseId}
-						showOrigins={hasOtherTimelines}
-						onEditTimeline={(character) =>
-							openCharacterTimeline(selectedUniverseId, character)
-						}
-					/>
-				) : selectedUniverseId !== null && canEdit ? (
-					<ProjectsPage
-						key={selectedUniverseId}
-						universeId={selectedUniverseId}
-						showPrimaryUniverses={hasOtherTimelines}
-					/>
-				) : null}
+					>
+						{isBrowsing ? (
+							<WorkspacesPage
+								key={activeView}
+								level={activeView}
+							/>
+						) : selectedUniverseId !== null && isTimeline ? (
+							<TimelinePage
+								key={
+									selectedUniverseId + ":" +
+									(focusedCharacterId ?? "all")
+								}
+								universeId={selectedUniverseId}
+								focusedCharacterId={focusedCharacterId}
+								onOpenOrigin={(character) =>
+									openCharacterTimeline(
+										character.origin_universe_id,
+										character
+									)
+								}
+							/>
+						) : selectedUniverseId !== null && activeView === "characters" && canEdit ? (
+							<CharactersPage
+								key={selectedUniverseId}
+								universeId={selectedUniverseId}
+								showOrigins={hasOtherTimelines}
+								onEditTimeline={(character) =>
+									openCharacterTimeline(selectedUniverseId, character)
+								}
+							/>
+						) : selectedUniverseId !== null && canEdit ? (
+							<ProjectsPage
+								key={selectedUniverseId}
+								universeId={selectedUniverseId}
+								showPrimaryUniverses={hasOtherTimelines}
+							/>
+						) : null}
+					</Suspense>
+				)}
 			</main>
 		</div>
 	);

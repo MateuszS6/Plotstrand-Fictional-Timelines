@@ -95,20 +95,24 @@ export default function CharacterRow({
 		universes
 	);
 
+	const appearancesByProject = new Map(
+		appearances
+			.filter((appearance) => appearance.character_id === character.id)
+			.map((appearance) => [appearance.project_id, appearance])
+	);
+
+	const eventsByProject = new Map(
+		characterEvents
+			.filter((event) => event.character_id === character.id)
+			.map((event) => [event.project_id, event])
+	);
+
 	const rowAppearances = projects.map((project) =>
-		appearances.find(
-			(appearance) =>
-				appearance.character_id === character.id &&
-				appearance.project_id === project.id
-		)
+		appearancesByProject.get(project.id)
 	);
 
 	const rowEvents = projects.map((project) =>
-		characterEvents.find(
-			(event) =>
-				event.character_id === character.id &&
-				event.project_id === project.id
-		)
+		eventsByProject.get(project.id)
 	);
 
 	const lifelineSegments =
