@@ -15,6 +15,16 @@ import './styles/timeline-guide.css'
 import './styles/timeline.css'
 import './styles/workspace.css'
 
+const analyticsOptOutKey = 'plotstrand.analyticsOptOut'
+
+function isAnalyticsOptedOut() {
+	try {
+		return window.localStorage.getItem(analyticsOptOutKey) === 'true'
+	} catch {
+		return false
+	}
+}
+
 const router = createBrowserRouter([
 	{ path: "*", element: <AppRoutes /> }
 ]);
@@ -22,6 +32,6 @@ const router = createBrowserRouter([
 createRoot(document.getElementById('root')!).render(
 	<StrictMode>
 		<RouterProvider router={router} />
-		<Analytics />
+		<Analytics beforeSend={(event) => isAnalyticsOptedOut() ? null : event} />
 	</StrictMode>,
 )

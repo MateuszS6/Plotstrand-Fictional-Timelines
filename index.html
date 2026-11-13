@@ -10,6 +10,26 @@
 	<title>Plotstrand — Fictional Timelines</title>
 	<meta name="description"
 		content="Explore fictional universes through character appearances, events and visual timelines." />
+	<script>
+		(() => {
+			const analyticsSetupUrl = new URL(window.location.href);
+			if (analyticsSetupUrl.searchParams.get('plotstrand-analytics') === 'off') {
+				try {
+					window.localStorage.setItem('plotstrand.analyticsOptOut', 'true');
+				} catch {
+					// Analytics opt-out requires browser storage to be available.
+				}
+
+				const isAppleMobile = /iPhone|iPad|iPod/.test(navigator.userAgent) ||
+					(navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+				// Keep the flag in the iOS home-screen app's launch URL so it can set its own storage.
+				if (!isAppleMobile) {
+					analyticsSetupUrl.searchParams.delete('plotstrand-analytics');
+					history.replaceState(null, '', analyticsSetupUrl.pathname + analyticsSetupUrl.search + analyticsSetupUrl.hash);
+				}
+			}
+		})();
+	</script>
 </head>
 
 <body>
